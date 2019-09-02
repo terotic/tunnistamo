@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}Kirjastokortti{% endblock %}
+
+{% block content %}
+<form action="{% url 'social:complete' backend='axiell_aurora' %}" method='post'>
+  <div class="form-group">
+    <label for="borrower-card-id">{% trans "Library card identifier" %}</label>
+    <input type="text" class="form-control" name="borrower_card_id" id="borrower-card-id" placeholder="{% trans "Card identifier" %}">
+  </div>
+  <div class="form-group">
+    <label for="borrower-pin">{% trans "PIN" %}</label>
+    <input type="password" class="form-control" name="borrower_pin" id="borrower-pin">
+  </div>
+  <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
+  {% csrf_token %}
+</form>
+{% endblock %}

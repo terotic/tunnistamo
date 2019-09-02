@@ -97,6 +97,7 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'django.contrib.auth.backends.ModelBackend',
     'auth_backends.suomifi.SuomiFiSAMLAuth',
+    'auth_backends.axiell_aurora.AuroraAuth',
 )
 
 RESTRICTED_AUTHENTICATION_BACKENDS = (
