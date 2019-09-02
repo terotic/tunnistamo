@@ -10,18 +10,20 @@
         {% block head_title %}{% block title %}{% endblock %} |
         Helsingin kaupunki{% endblock %}
     </title>
-    <link href="{% sass_src 'css/helsinki_theme.scss' %}" rel="stylesheet" type="text/css" />
+    <link href="{% sass_src 'css/testi.scss' %}" rel="stylesheet" type="text/css" />
 </head>
 
 <body class="bg-info">
   <div class="container content-container">
-    <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-      <div class="content-card">
-        <header>
-          <img src="{% static "hel-bootstrap-3/src/assets/helsinki-logo-black.svg" %}" class="logo">
-          <h1 class="service-title">Tunnistamo</h1>
-        </header>
-        {% block body_content %}{% endblock %}
+    <div class="row justify-content-center">
+      <div class="col-sm-8 col-md-6">
+        <div class="card content-card">
+          <header class="card-title">
+            <img src="{% static "hel-bootstrap-3/src/assets/helsinki-logo-black.svg" %}" class="logo">
+            <h1 class="service-title">Tunnistamo</h1>
+          </header>
+          {% block body_content %}{% endblock %}
+        </div>
       </div>
     </div>
   </div>
