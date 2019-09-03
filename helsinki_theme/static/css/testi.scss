@@ -6,6 +6,8 @@
 // Import city specific bootstrap variable overrides:
 @import "open-city-design/src/scss/helsinki/variables";
 
+@import "css/helsinki_theme";
+
 @import "bootstrap/scss/mixins";
 @import "bootstrap/scss/root";
 @import "bootstrap/scss/reboot";
