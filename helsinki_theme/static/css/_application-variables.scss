@@ -30,5 +30,5 @@ $theme-danger-light:  $hel-suomenlinna;
 
 $icon-font-path: unquote(get-setting(STATIC_URL) + "node_modules/bootstrap-sass/assets/fonts/bootstrap/");
 
-$font-family-sans-serif:  $hel-grotesk;
+$font-family-sans-serif:  "Times", serif;
 $font-family-serif:       'Noto Serif', serif;
