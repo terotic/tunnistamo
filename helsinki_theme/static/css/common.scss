@@ -16,15 +16,23 @@
 }
 */
 
+.bg-brand-light {
+  background-color: $brand-light;
+}
+
 .content-container {
-  margin-top: $line-height-base;
+  margin-top: 1.5emm;
 }
 
 .content-card {
-  padding: $line-height-base;
+  padding: 1.5em;
   background-color: $white;
   box-shadow: 3px 3px 3px rgba($black, 0.5);
   @extend .clearfix;
+
+  h2 {
+    margin-bottom: 1em;
+  }
 
   header {
     @extend .clearfix;
@@ -57,6 +65,6 @@
 
 .login-method__primary {
   border-bottom: 1px solid theme-color("primary");
-  border-top: 1px solid theme-color("primray");
+  border-top: 1px solid theme-color("primary");
   padding-top: 1em;
 }
