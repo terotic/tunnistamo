@@ -51,7 +51,7 @@
 }
 
 .login-method {
-  margin-bottom: $line-height-base / 2;
+  margin-bottom: 1em;
 
   .short-description {
     margin-top: 6px;
@@ -67,4 +67,46 @@
   border-bottom: 1px solid theme-color("primary");
   border-top: 1px solid theme-color("primary");
   padding-top: 1em;
+}
+
+.login-method {
+  .btn {
+    color: #fff;
+    text-align: left;
+
+    &-facebook {
+      background-color: #4172B8;
+
+      &:hover {
+        background-color: darken(#4172B8, 7%);
+      }
+    }
+    &-google {
+      background-color: #4285F4;
+      &:hover {
+        background-color: darken(#4285F4, 7%);
+      }
+    }
+    &-github {
+      background-color: #181717;
+      &:hover {
+        background-color: darken(#181717, 7%);
+      }
+    }
+  }
+
+  .icon {
+    display: inline-block;
+    height: 1.2em;
+    width: 1.7em;
+    border-right: 1px solid #fff;
+    padding-right: .5em;
+    margin-right: .5em;
+
+    svg {
+      display: block;
+      height: 1.2em;
+      fill: #fff;
+    }
+  }
 }

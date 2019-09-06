@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load svg %}
 
 {% block title %}Kirjaudu sisään{% endblock %}
 
@@ -14,7 +15,9 @@
       {% if not method.logo_url %}
       <a href="{{ method.login_url }}"
          class="btn btn-block btn-social btn-{{ method.provider_id }}">
-          <span class="fa fa-{{ method.provider_id }}"></span>
+          <span class="icon icon-{{ method.provider_id }}" aria-hidden="true">
+            {% svg method.provider_id %}
+          </span>
           {{ method.name }}
       </a>
       {% else %}
