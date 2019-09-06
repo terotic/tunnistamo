@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'corsheaders',
     'helsinki_theme',
     'bootstrap3',
+    'svg',
     'crequest',
     'django_filters',
 
@@ -185,6 +186,11 @@ MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = [
     ('node_modules', os.path.join(BASE_DIR, 'node_modules')),
+]
+
+SVG_DIRS = [
+    os.path.join(BASE_DIR, 'node_modules','simple-icons','icons'),
+    os.path.join(BASE_DIR, 'helsinki_theme', 'static', 'svg'),
 ]
 
 SITE_ID = 1

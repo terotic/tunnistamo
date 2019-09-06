@@ -18,6 +18,7 @@ django-npm
 libsass
 django-compressor
 django-sass-processor
+django-inline-svg
 social-auth-core[openidconnect,saml]
 social-auth-app-django
 requests
