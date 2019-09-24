@@ -190,7 +190,7 @@ STATICFILES_DIRS = [
 
 SVG_DIRS = [
     os.path.join(BASE_DIR, 'node_modules','simple-icons','icons'),
-    os.path.join(BASE_DIR, 'helsinki_theme', 'static', 'svg'),
+    os.path.join(BASE_DIR, 'themes', 'static', 'svg'),
 ]
 
 SITE_ID = 1
