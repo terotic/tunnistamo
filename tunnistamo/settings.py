@@ -18,13 +18,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 env = environ.Env(
     DEBUG=(bool, False),
     SECRET_KEY=(str, ""),
-    DATABASE_URL=(str, ""),
+    DATABASE_URL=(str, 'postgres:///respa'),
     ALLOWED_HOSTS=(list, []),
 
     STATIC_URL=(str, "/sso/static/"),
     STATIC_ROOT=(str, os.path.join(BASE_DIR, 'static')),
     MEDIA_ROOT=(str, os.path.join(BASE_DIR, 'media')),
     NODE_MODULES_ROOT=(str, os.path.join(BASE_DIR, 'node_modules')),
+
+    TUNNISTAMO_THEME=(str, 'helsinki'),
 
     # Authentication settings
     SOCIAL_AUTH_FACEBOOK_KEY=(str, ""),
@@ -229,14 +231,15 @@ STATICFILES_DIRS = [
 ]
 
 SVG_DIRS = [
-    os.path.join(NODE_MODULES_PATH, 'simple-icons', 'icons'),
+    os.path.join(NODE_MODULES_ROOT, 'simple-icons', 'icons'),
 ]
 
 COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', '%s/.bin/node-sass --importer=%s/node-sass-tilde-importer {infile} {outfile}' % (NODE_MODULES_PATH, NODE_MODULES_PATH)),  # noqa
+    ('text/x-scss', '%s/.bin/node-sass --importer=%s/node-sass-tilde-importer {infile} {outfile}' % (NODE_MODULES_ROOT, NODE_MODULES_ROOT)),  # noqa
 )
 
 SITE_ID = 1
+TUNNISTAMO_THEME = env('TUNNISTAMO_THEME')
 
 PARLER_LANGUAGES = {SITE_ID: [{'code': code} for (code, name) in LANGUAGES]}
 
