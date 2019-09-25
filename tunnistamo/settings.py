@@ -52,13 +52,12 @@ INSTALLED_APPS = (
 
     'rest_framework',
     'corsheaders',
-    'helsinki_theme',
-    'bootstrap3',
     'svg',
     'crequest',
     'django_filters',
 
     'helusers',
+    'themes',
 
     'yletunnus',
     'adfs_provider',
