@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 env = environ.Env(
     DEBUG=(bool, False),
     SECRET_KEY=(str, ""),
-    DATABASE_URL=(str, 'postgres:///respa'),
+    DATABASE_URL=(str, 'postgres:///tunnistamo'),
     ALLOWED_HOSTS=(list, []),
 
     STATIC_URL=(str, "/sso/static/"),
