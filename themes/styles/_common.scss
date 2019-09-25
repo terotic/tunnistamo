@@ -58,8 +58,8 @@
   }
 
   .ext-icon img {
-    max-height: 24px;
-    max-width: 24px;
+    max-height: 1.5rem;
+    max-width: 1.5rem;
   }
 }
 
@@ -90,22 +90,27 @@
     &-github {
       background-color: #181717;
       &:hover {
-        background-color: darken(#181717, 7%);
+        background-color: lighten(#181717, 7%);
+      }
+    }
+    &-yletunnus {
+      background-color: #00b5c8;
+      &:hover {
+        background-color: darken(#00b4c8, 7%);
       }
     }
   }
 
   .icon {
     display: inline-block;
-    height: 1.2em;
-    width: 1.7em;
-    border-right: 1px solid #fff;
-    padding-right: .5em;
-    margin-right: .5em;
+    border-right: 2px solid #fff;
+    padding-right: .75rem;
+    margin-right: .5rem;
+    vertical-align: middle;
 
     svg {
       display: block;
-      height: 1.2em;
+      height: 1.5rem;
       fill: #fff;
     }
   }
