@@ -1,4 +1,4 @@
-django>=2.1,<2.2
+django
 django-multiselectfield
 django-oauth-toolkit
 django-parler
@@ -15,9 +15,7 @@ raven
 PyJWT
 cryptography
 django-npm
-libsass
 django-compressor
-django-sass-processor
 django-inline-svg
 social-auth-core[openidconnect,saml]
 social-auth-app-django
@@ -29,6 +27,6 @@ django-ipware
 geoip2
 django-filter
 coreapi
-git+git://github.com/City-of-Helsinki/python3-saml.git@v1.5.0-tunnistamo
+python3-saml
 ruamel.yaml
 git+git://github.com/City-of-Helsinki/django-translation-checker.git@master
