@@ -16,7 +16,8 @@ PyJWT
 cryptography
 django-npm
 django-compressor
-django-inline-svg
+django-environ
+django-sass-processor
 social-auth-core[openidconnect,saml]
 social-auth-app-django
 requests
