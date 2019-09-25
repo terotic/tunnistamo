@@ -21,8 +21,9 @@ env = environ.Env(
     DATABASE_URL=(str, 'postgres:///tunnistamo'),
     ALLOWED_HOSTS=(list, []),
 
-    STATIC_URL=(str, "/sso/static/"),
+    STATIC_URL=(str, '/static/'),
     STATIC_ROOT=(str, os.path.join(BASE_DIR, 'static')),
+    MEDIA_URL=(str, '/media/'),
     MEDIA_ROOT=(str, os.path.join(BASE_DIR, 'media')),
     NODE_MODULES_ROOT=(str, os.path.join(BASE_DIR, 'node_modules')),
 
@@ -218,11 +219,11 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-STATIC_ROOT = env("STATIC_ROOT")
-STATIC_URL = '/sso/static/'
+STATIC_ROOT = env('STATIC_ROOT')
+STATIC_URL = env('STATIC_URL')
 
-MEDIA_ROOT = env("MEDIA_ROOT")
-MEDIA_URL = '/media/'
+MEDIA_ROOT = env('MEDIA_ROOT')
+MEDIA_URL = env('MEDIA_URL')
 
 NODE_MODULES_ROOT = env("NODE_MODULES_ROOT")
 STATICFILES_DIRS = [
