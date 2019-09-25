@@ -29,12 +29,13 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.sites',
+    'django.contrib.messages',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
 
     'parler',
-    'sass_processor',
+    'compressor',
 
     'oauth2_provider',
     'users',
@@ -174,7 +175,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'npm.finders.NpmFinder',
-    'sass_processor.finders.CssFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -183,14 +184,19 @@ STATIC_URL = '/sso/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+NODE_MODULES_PATH = os.path.join(BASE_DIR, 'node_modules')
 STATICFILES_DIRS = [
-    ('node_modules', os.path.join(BASE_DIR, 'node_modules')),
+    ('node_modules', NODE_MODULES_PATH),
+    ('styles', os.path.join(BASE_DIR, 'themes', 'styles')),
 ]
 
 SVG_DIRS = [
-    os.path.join(BASE_DIR, 'node_modules','simple-icons','icons'),
-    os.path.join(BASE_DIR, 'helsinki_theme', 'static', 'svg'),
+    os.path.join(NODE_MODULES_PATH, 'simple-icons', 'icons'),
 ]
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', '%s/.bin/node-sass --importer=%s/node-sass-tilde-importer {infile} {outfile}' % (NODE_MODULES_PATH, NODE_MODULES_PATH)),  # noqa
+)
 
 SITE_ID = 1
 
@@ -311,11 +317,6 @@ KEY_MANAGER_RSA_KEY_LENGTH = 4096
 KEY_MANAGER_RSA_KEY_MAX_AGE = 3 * 30
 KEY_MANAGER_RSA_KEY_EXPIRATION_PERIOD = 7
 
-SASS_PROCESSOR_INCLUDE_DIRS = [
-    os.path.join(BASE_DIR, 'node_modules'),
-]
-
-SASS_PRECISION = 8
 
 TEST_NON_SERIALIZED_APPS = ['adfs_provider']
 

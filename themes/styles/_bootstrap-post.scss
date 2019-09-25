@@ -1,16 +1,3 @@
-@import "~bootstrap/scss/bootstrap";
-
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/_variables";
-
-// Ocds specific variable overrides are not currently in use
-
-// Import city specific bootstrap variable overrides:
-@import "~open-city-design/src/scss/helsinki/variables";
-
-$brand-light:  $hel-fog;
-$brand-dark:   $hel-bus;
-
 @import "~bootstrap/scss/_mixins";
 @import "~bootstrap/scss/root";
 @import "~bootstrap/scss/reboot";
@@ -44,9 +31,3 @@ $brand-dark:   $hel-bus;
 @import "~bootstrap/scss/carousel";
 @import "~bootstrap/scss/_utilities";
 @import "~bootstrap/scss/print";
-
-// Import city specific style overrides.
-@import "~open-city-design/src/scss/helsinki/mixins";
-@import "~open-city-design/src/scss/helsinki/custom-styles";
-
-@import "./common";

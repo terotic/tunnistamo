@@ -1,4 +1,4 @@
-{% load static sass_tags %}
+{% load static compress %}
 <!DOCTYPE html>
 <html{% if request.LANGUAGE_CODE %} lang="{{ request.LANGUAGE_CODE }}"{% endif %}>
 
@@ -10,7 +10,9 @@
         {% block head_title %}{% block title %}{% endblock %} |
         Helsingin kaupunki{% endblock %}
     </title>
-    <link href="{% static tunnistamo_style_file %}" rel="stylesheet" type="text/css" />
+{% compress css %}
+    <link type="text/x-scss" rel="stylesheet" href="/static/styles/themes/{{ tunnistamo_theme }}.scss" charset="utf-8">
+{% endcompress %}
 </head>
 
 <body class="bg-brand-light">
