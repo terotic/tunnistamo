@@ -11,7 +11,7 @@
         Helsingin kaupunki{% endblock %}
     </title>
 {% compress css %}
-    <link type="text/x-scss" rel="stylesheet" href="/static/styles/themes/{{ tunnistamo_theme }}.scss" charset="utf-8">
+    <link type="text/x-scss" rel="stylesheet" href="/static/styles/themes/{{ tunnistamo_theme }}/main.scss" charset="utf-8">
 {% endcompress %}
 </head>
 
@@ -21,7 +21,7 @@
       <div class="col-sm-8 col-md-6">
         <div class="card content-card">
           <header class="card-title">
-            <img src="{% static "open-city-design/src/assets/helsinki-logo-black.svg" %}" class="logo">
+            <div class="logo theme-logo"></div>
             <h1 class="service-title">Tunnistamo</h1>
           </header>
           {% block body_content %}{% endblock %}

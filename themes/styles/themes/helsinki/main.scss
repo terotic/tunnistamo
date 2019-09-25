@@ -1,6 +1,4 @@
-@import "../bootstrap-pre";
-
-// Ocds specific variable overrides are not currently in use
+@import "../../bootstrap-pre";
 
 // Import city specific bootstrap variable overrides:
 @import "~open-city-design/src/scss/helsinki/variables";
@@ -8,10 +6,12 @@
 $brand-light:  $hel-fog;
 $brand-dark:   $hel-bus;
 
-@import "../bootstrap-post";
+$logo-url:     "/static/open-city-design/src/assets/helsinki-logo-black.svg";
+
+@import "../../bootstrap-post";
 
 // Import city specific style overrides.
 @import "~open-city-design/src/scss/helsinki/mixins";
 @import "~open-city-design/src/scss/helsinki/custom-styles";
 
-@import "../common";
+@import "../../common";

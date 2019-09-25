@@ -1,0 +1,62 @@
+// Non brand colors
+$white:         #ffffff;
+$light-gray:    #ebedf1;
+$dark-gray:     #525a65;
+$medium-gray:   #abb2bd;
+$black:         #000000;
+
+$gray:         $dark-gray;
+$gray-light:   #757575;
+$gray-lighter: $light-gray;
+
+// Turku main colors
+$turku-primary-blue: #006bb6;
+$turku-primary-yellow: #ffc233;
+$turku-primary-cyan: #00aeef;
+
+// Turku complementary colors
+$turku-complementary-pink: #ed0c6e;
+$turku-complementary-mint: #7dcdc8;
+$turku-complementary-orange: #f26522;
+$turku-complementary-khaki: #c3c4b7;
+$turku-complementary-green: #00a97a;
+$turku-complementary-gray: #404040;
+
+// Kiss my turku colors
+$kiss-my-turku-red: #ed1a3b;
+$kiss-my-turku-black: $black;
+$kiss-my-turku-white: $white;
+
+$theme-success:       $turku-complementary-green;
+$theme-success-light: scale-color($theme-success, $lightness: 15%);
+$theme-info:          $turku-primary-blue;
+$theme-info-light:    scale-color($theme-info, $lightness: 70%);
+$theme-warning:       $turku-complementary-orange;
+$theme-warning-light: scale-color($theme-warning, $lightness: 30%);
+$theme-danger:        darken($kiss-my-turku-red, 3%);
+$theme-danger-light:  scale-color($theme-danger, $lightness: 40%);
+
+$theme-primary-dark:    $turku-primary-blue;
+$theme-primary-light:   $turku-primary-yellow;
+
+$theme-secondary-dark:  $turku-complementary-pink;
+$theme-secondary-light: $turku-complementary-mint;
+
+$theme-highlight-dark:  $turku-primary-cyan;
+$theme-highlight-light: $turku-complementary-mint;
+
+$brand-primary:   $theme-primary-dark;
+$brand-success:   $theme-success;
+$brand-info:      $theme-info;
+$brand-warning:   $theme-warning;
+$brand-danger:    $theme-danger;
+
+$font-family-sans-serif: "Open Sans", Arial, sans-serif;
+
+$navbar-default-color:            $white;
+$navbar-default-link-color:       $white;
+$navbar-default-link-hover-color: $white;
+
+$navbar-default-toggle-hover-bg:     transparent;
+$navbar-default-toggle-icon-bar-bg:  $white;
+$navbar-default-toggle-border-color: $white;

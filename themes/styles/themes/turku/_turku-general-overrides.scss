@@ -1,0 +1,17 @@
+:focus,
+.form-control:focus,
+a:focus,
+button:focus,
+.btn:focus,
+.Select.is-focused:not(.is-open) > .Select-control {
+  outline: 3px solid;
+  outline-offset: 0;
+  outline-color: #00375e;
+}
+
+.site-footer,
+.navbar-primary {
+  :focus {
+    outline-color: #fff;
+  }
+}

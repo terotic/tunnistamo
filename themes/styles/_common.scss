@@ -16,6 +16,12 @@
 }
 */
 
+.theme-logo {
+  background-image: url($logo-url);
+  background-repeat: no-repeat;
+  width: 120px;
+}
+
 .bg-brand-light {
   background-color: $brand-light;
 }

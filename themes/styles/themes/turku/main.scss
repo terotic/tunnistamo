@@ -1,0 +1,12 @@
+@import "../../bootstrap-pre";
+@import "./variables";
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800&display=swap');
+
+$brand-light:  $turku-primary-blue;
+$brand-dark:   $turku-complementary-gray;
+
+$logo-url:     "/static/styles/themes/turku/logo-fi-black.svg";
+
+@import "../../bootstrap-post";
+@import "../../common";
