@@ -18,7 +18,9 @@
           <span class="icon icon-{{ method.provider_id }}" aria-hidden="true">
             {% svg method.provider_id %}
           </span>
-          {{ method.name }}
+          <span class="method-name">
+            {{ method.name }}
+          </span>
       </a>
       {% else %}
       <a href="{{ method.login_url }}"
@@ -28,7 +30,9 @@
           <span class="ext-icon">
               <img src="{{ method.logo_url }}" />
           </span>
-          {{ method.name }}
+          <span class="method-name">
+            {{ method.name }}
+          </span>
       </a>
       {% endif %}
       {% if method.short_description %}

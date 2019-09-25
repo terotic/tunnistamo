@@ -77,8 +77,10 @@
 
 .login-method {
   .btn {
+    background-color: $gray-500;
     color: #fff;
     text-align: left;
+    font-weight: 600;
 
     &-facebook {
       background-color: #4172B8;
@@ -96,23 +98,59 @@
     &-github {
       background-color: #181717;
       &:hover {
-        background-color: darken(#181717, 7%);
+        background-color: lighten(#181717, 7%);
+      }
+    }
+    &-tumblr {
+      background-color: #36465D;
+      &:hover {
+        background-color: darken(#36465D, 7%);
+      }
+    }
+    &-yletunnus {
+      background-color: #00b5c8;
+      &:hover {
+        background-color: darken(#00b4c8, 7%);
+      }
+    }
+    &-helsinki, &-helsinki_adfs {
+      background-color: #0000bf;
+      &:hover {
+        background-color: darken(#0000bf, 7%);
+      }
+    }
+    &-espoo, &-espoo_adfs {
+      background-color: #00A0E2;
+      &:hover {
+        background-color: darken(#00A0E2, 7%);
       }
     }
   }
 
-  .icon {
+  .icon, .ext-icon {
     display: inline-block;
-    height: 1.2em;
-    width: 1.7em;
-    border-right: 1px solid #fff;
-    padding-right: .5em;
-    margin-right: .5em;
+    border-right: 2px solid #fff;
+    padding-right: .75rem;
+    margin-right: .5rem;
+    vertical-align: middle;
 
     svg {
       display: block;
-      height: 1.2em;
+      height: 1.5rem;
+      max-width: 1.5rem;
       fill: #fff;
     }
+    
+    img {
+      height: 1.5rem;
+      max-width: 1.5rem;
+    }
   }
+  
+  .method-name {
+    display: inline-block;
+    vertical-align: middle;
+    width: auto;
+  }
+  
 }

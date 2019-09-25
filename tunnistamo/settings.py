@@ -233,6 +233,7 @@ STATICFILES_DIRS = [
 
 SVG_DIRS = [
     os.path.join(NODE_MODULES_ROOT, 'simple-icons', 'icons'),
+    os.path.join(BASE_DIR, 'themes', 'static', 'svg'),
 ]
 
 COMPRESS_PRECOMPILERS = (
