@@ -215,7 +215,6 @@ AUTH_USER_MODEL = 'users.User'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'npm.finders.NpmFinder',
     'compressor.finders.CompressorFinder',
 )
 
@@ -227,7 +226,6 @@ MEDIA_URL = env('MEDIA_URL')
 
 NODE_MODULES_ROOT = env("NODE_MODULES_ROOT")
 STATICFILES_DIRS = [
-    ('node_modules', NODE_MODULES_ROOT),
     ('styles', os.path.join(BASE_DIR, 'themes', 'styles')),
 ]
 
