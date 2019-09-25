@@ -41,14 +41,6 @@ INSTALLED_APPS = (
     'users',
     'oidc_provider',
 
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.tumblr',
-
     'social_django',
 
     'rest_framework',
@@ -60,8 +52,6 @@ INSTALLED_APPS = (
     'helusers',
     'themes',
 
-    'yletunnus',
-    'adfs_provider',
     'hkijwt',
     'oidc_apis',
     'devices',
