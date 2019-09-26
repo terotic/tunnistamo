@@ -125,6 +125,18 @@
         background-color: darken(#00A0E2, 7%);
       }
     }
+    &-turku, &-turku_adfs {
+      background-color: #006bb6;
+      &:hover {
+        background-color: darken(#006bb6, 7%);
+      }
+    }
+    &-axiell_aurora {
+      background-color: #00c8f2;
+      &:hover {
+        background-color: darken(#00c8f2, 7%);
+      }
+    }
   }
 
   .icon, .ext-icon {

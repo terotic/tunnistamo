@@ -143,6 +143,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'auth_backends.suomifi.SuomiFiSAMLAuth',
     'auth_backends.axiell_aurora.AuroraAuth',
+    'auth_backends.adfs.turku.TurkuADFS',
 )
 
 RESTRICTED_AUTHENTICATION_BACKENDS = (
