@@ -137,6 +137,12 @@
         background-color: darken(#00c8f2, 7%);
       }
     }
+    &-turku_suomifi {
+      background-color: #003479;
+      &:hover {
+        background-color: darken(#003479, 7%);
+      }
+    }
   }
 
   .icon, .ext-icon {

@@ -144,6 +144,7 @@ AUTHENTICATION_BACKENDS = (
     'auth_backends.suomifi.SuomiFiSAMLAuth',
     'auth_backends.axiell_aurora.AuroraAuth',
     'auth_backends.adfs.turku.TurkuADFS',
+    'auth_backends.turku_suomifi.TurkuSuomiFiAuth',
 )
 
 RESTRICTED_AUTHENTICATION_BACKENDS = (
