@@ -68,9 +68,13 @@ def require_email(details, backend, user=None, *args, **kwargs):
     if user:
         return
 
-    # Suomi.fi returns PRC(VRK) information, which often doesn't inclue email address
+    # Suomi.fi returns PRC(VRK) information, which often doesn't include email address
     if backend.name == 'suomifi':
         return
+
+    if hasattr(backend, 'is_email_needed'):
+        if not backend.is_email_needed(user=user, **kwargs):
+            return
 
     email = details.get('email')
     if not email:
