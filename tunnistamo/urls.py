@@ -23,26 +23,10 @@ from tunnistamo import social_auth_urls
 from users.api import TunnistamoAuthorizationView, UserConsentViewSet, UserLoginEntryViewSet
 from users.views import (
     EmailNeededView, LoginView, LogoutView, TunnistamoOidcAuthorizeView, TunnistamoOidcEndSessionView,
-    TunnistamoOidcTokenView
+    TunnistamoOidcTokenView, show_profile
 )
 
 from .api import GetJWTView, UserView
-
-
-def show_login(request):
-    html = "<html><body>"
-    if request.user.is_authenticated:
-        html += "<div>%s</div>" % request.user
-        if request.user.ad_groups.exists():
-            html += "<h3>AD groups</h3>"
-            html += "<ul>"
-            for group in request.user.ad_groups.all():
-                html += "<li>%s</li>" % str(group)
-            html += "</ul>"
-    else:
-        html += "not logged in"
-    html += "</body></html>"
-    return HttpResponse(html)
 
 
 class AllEnglishSchemaGenerator(SchemaGenerator):
@@ -64,7 +48,7 @@ v1_api_path = path('v1/', include((router.urls + [v1_scope_path], 'v1')))
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-tokens/', get_api_tokens_view),
-    path('accounts/profile/', show_login),
+    path('profile/', show_profile),
     path('accounts/login/', LoginView.as_view()),
     path('accounts/logout/', LogoutView.as_view()),
     path('accounts/', include(auth_backends.urls, namespace='auth_backends')),

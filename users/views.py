@@ -4,6 +4,7 @@ from urllib.parse import parse_qs, urlparse
 
 from django.conf import settings
 from django.contrib.auth import logout as auth_logout
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import translation
@@ -241,3 +242,25 @@ def _add_api_scopes(scope_string):
     scopes = scope_string.split()
     extended_scopes = ApiScope.extend_scope(scopes)
     return ' '.join(extended_scopes)
+
+
+def show_profile(request):
+    html = "<html><body>"
+    if request.user.is_authenticated:
+        html += '<p>logged in<p>'
+        html += '<table>'
+        attrs = ['first_name', 'last_name', 'email', 'birthdate']
+        user = request.user
+        for attr_name in attrs:
+            html += "<tr><td>%s</td><td>%s</td></tr>" % (attr_name, getattr(user, attr_name, None))
+        html += '</table>'
+        if request.user.ad_groups.exists():
+            html += "<h3>AD groups</h3>"
+            html += "<ul>"
+            for group in request.user.ad_groups.all():
+                html += "<li>%s</li>" % str(group)
+            html += "</ul>"
+    else:
+        html += "not logged in"
+    html += "</body></html>"
+    return HttpResponse(html)
