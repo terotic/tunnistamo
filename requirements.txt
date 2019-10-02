@@ -5,6 +5,7 @@
 #    pip-compile
 #
 asn1crypto==0.24.0        # via cryptography
+beautifulsoup4==4.8.0     # via django-bootstrap4
 certifi==2019.9.11        # via requests
 cffi==1.12.3              # via cryptography
 chardet==3.0.4            # via requests
@@ -14,19 +15,20 @@ cryptography==2.7
 defusedxml==0.6.0         # via python3-openid, python3-saml, social-auth-core
 django-allauth==0.40.0
 django-appconf==1.0.3     # via django-compressor
-django-bootstrap3==11.1.0
+django-bootstrap4==1.0.1
 django-compressor==2.3
 django-cors-headers==3.1.0
 django-crequest==2018.5.11
+django-environ==0.4.5
 django-filter==2.2.0
 django-helusers==0.5.1
-django-environ==0.4.5
 django-ipware==2.1.0
 django-multiselectfield==0.1.8
 django-npm==1.0.0
 django-oauth-toolkit==1.2.0
 django-oidc-provider==0.7.0
 django-parler==2.0
+django-sass-processor==0.7.3
 git+git://github.com/City-of-Helsinki/django-translation-checker.git@master
 django==2.2.5
 djangorestframework==3.10.3
@@ -68,6 +70,7 @@ ruamel.yaml==0.16.5
 six==1.12.0               # via cryptography, django-appconf, isodate, pyjwkest, python-jose, social-auth-app-django, social-auth-core
 social-auth-app-django==3.1.0
 social-auth-core[openidconnect,saml]==3.2.0
+soupsieve==1.9.4          # via beautifulsoup4
 sqlparse==0.3.0           # via django
 uritemplate==3.0.0        # via coreapi
 urllib3==1.25.6           # via requests

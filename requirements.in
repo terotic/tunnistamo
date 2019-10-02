@@ -8,7 +8,7 @@ djangorestframework
 pyjwt
 django-helusers
 django-allauth
-django-bootstrap3
+django-bootstrap4
 psycopg2
 psycopg2-binary
 raven

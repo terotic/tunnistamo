@@ -88,6 +88,7 @@ INSTALLED_APPS = (
 
     'parler',
     'compressor',
+    'bootstrap4',
 
     'oauth2_provider',
     'users',
@@ -245,6 +246,15 @@ SVG_DIRS = [
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', '%s/.bin/node-sass --importer=%s/node-sass-tilde-importer {infile} {outfile}' % (NODE_MODULES_ROOT, NODE_MODULES_ROOT)),  # noqa
 )
+
+# Bootstrap is included through our main style file
+BOOTSTRAP4 = {
+    'css_url': None,
+    'javascript_url': None,
+    'include_jquery': False,
+    'success_css_class': None,
+}
+
 
 SITE_ID = 1
 TUNNISTAMO_THEME = env('TUNNISTAMO_THEME')
