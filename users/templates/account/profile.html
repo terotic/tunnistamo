@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block head_title %}Profiili{% endblock %}
+
+{% block content %}
+<h1>Profiili</h1>
+
+{% with user=request.user %}
+
+{% if user.is_authenticated %}
+<table>
+    {% for attr_name, val in attrs.items %}
+    <tr><td>{{ attr_name }}</td><td>{{ val }}</td></tr>
+    {% endfor %}
+</table>
+
+{% if user.social_auth.exists %}
+<hr />
+<h4>Kirjautumistiedot</h4>
+<table>
+    {% for auth in user.social_auth.all %}
+    <tr><td>{{ auth.provider }}</td><td>{{ auth.uid }}</td></tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% endif %}
+{% endwith %}
+
+{% endblock %}
