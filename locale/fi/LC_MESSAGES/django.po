@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tunnistamo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-25 15:47+0300\n"
+"POT-Creation-Date: 2019-10-02 18:13+0300\n"
 "PO-Revision-Date: 2019-04-17 07:55+0000\n"
 "Last-Translator: Timo Tuominen <dev@hel.fi>, 2019\n"
 "Language-Team: Finnish (https://www.transifex.com/city-of-helsinki-1/teams/98217/fi/)\n"
@@ -49,23 +49,27 @@ msgstr "Etunimi"
 msgid "Last name"
 msgstr "Sukunimi"
 
-#: auth_backends/templates/axiell_aurora/login.html:10
+#: auth_backends/axiell_aurora.py:27
 msgid "Library card identifier"
 msgstr "Kirjastokortin tunnus"
 
-#: auth_backends/templates/axiell_aurora/login.html:11
+#: auth_backends/axiell_aurora.py:29
 msgid "Card identifier"
 msgstr "Kortin tunnus"
 
-#: auth_backends/templates/axiell_aurora/login.html:14
-msgid "PIN"
-msgstr "Tunnusluku (PIN)"
+#: auth_backends/axiell_aurora.py:100
+msgid "Library card login unavailable. Please try again later."
+msgstr "Kirjastokorttikirjautuminen pois käytöstä. Ole hyvä ja yritä uudelleen myöhemmin."
 
-#: auth_backends/templates/axiell_aurora/login.html:17
+#: auth_backends/axiell_aurora.py:102
+msgid "Invalid card number or PIN"
+msgstr "Väärä kortinnumero tai PIN-koodi"
+
+#: auth_backends/templates/axiell_aurora/login.html:12
 msgid "Login"
 msgstr "Kirjautuminen"
 
-#: devices/models.py:17 identities/models.py:11 users/models.py:106
+#: devices/models.py:17 identities/models.py:11 users/models.py:107
 msgid "user"
 msgstr "käyttäjä"
 
@@ -109,7 +113,7 @@ msgstr "käyttäjien laitteet"
 msgid "allowed OAuth scopes"
 msgstr ""
 
-#: identities/models.py:12 services/models.py:29 users/models.py:108
+#: identities/models.py:12 services/models.py:29 users/models.py:109
 msgid "service"
 msgstr "palvelu"
 
@@ -351,31 +355,35 @@ msgstr ""
 msgid "Users"
 msgstr "Käyttäjät"
 
-#: users/models.py:77
+#: users/models.py:24
+msgid "birth date"
+msgstr "syntymäaika"
+
+#: users/models.py:78
 msgid "OIDC Client"
 msgstr ""
 
-#: users/models.py:83 users/models.py:84
+#: users/models.py:84 users/models.py:85
 msgid "OIDC Client Options"
 msgstr ""
 
-#: users/models.py:110
+#: users/models.py:111
 msgid "timestamp"
 msgstr "aikaleima"
 
-#: users/models.py:111
+#: users/models.py:112
 msgid "IP address"
 msgstr "IP-osoite"
 
-#: users/models.py:112
+#: users/models.py:113
 msgid "geo location"
 msgstr "sijaintitiedot"
 
-#: users/models.py:117
+#: users/models.py:118
 msgid "user login entry"
 msgstr "kirjautumismerkintä"
 
-#: users/models.py:118
+#: users/models.py:119
 msgid "user login entries"
 msgstr "kirjautumismerkinnät"
 
@@ -395,3 +403,6 @@ msgstr "Älä anna lupaa"
 #: users/templates/oidc_provider/authorize.html:21
 msgid "Allow"
 msgstr "Anna lupa"
+
+#~ msgid "PIN"
+#~ msgstr "Tunnusluku (PIN)"
