@@ -1,20 +1,29 @@
 {% extends 'base.html' %}
 
-{% load i18n %}
+{% load i18n bootstrap4 %}
 
 {% block title %}Kirjastokortti{% endblock %}
 
 {% block content %}
-<form action="{% url 'social:complete' backend='axiell_aurora' %}" method='post'>
+<form action="{% url 'social:begin' backend='axiell_aurora' %}" method='post' class='form'>
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% buttons %}
+    <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
+  {% endbuttons %}
+
+  {% comment %}
   <div class="form-group">
     <label for="borrower-card-id">{% trans "Library card identifier" %}</label>
-    <input type="text" class="form-control" name="borrower_card_id" id="borrower-card-id" placeholder="{% trans "Card identifier" %}">
+    <input type="text" class="form-control" name="borrower_card_id" id="borrower-card-id" placeholder="{% trans 'Card identifier' %}" />
   </div>
   <div class="form-group">
     <label for="borrower-pin">{% trans "PIN" %}</label>
-    <input type="password" class="form-control" name="borrower_pin" id="borrower-pin">
+    <input type="password" class="form-control" name="borrower_pin" id="borrower-pin" />
   </div>
+  <input type="hidden" name="state" value="{{ state }}" />
   <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
   {% csrf_token %}
+  {% endcomment %}
 </form>
 {% endblock %}
