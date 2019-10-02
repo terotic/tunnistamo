@@ -31,3 +31,4 @@ coreapi
 python3-saml
 ruamel.yaml
 git+git://github.com/City-of-Helsinki/django-translation-checker.git@master
+django-inline-svg
