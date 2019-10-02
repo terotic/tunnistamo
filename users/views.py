@@ -30,6 +30,11 @@ class LoginView(TemplateView):
     template_name = "login.html"
 
     def get(self, request, *args, **kwargs):  # noqa  (too complex)
+        # Log the user out first so that we don't end up in the PSA "connect"
+        # flow.
+        if self.request.user.is_authenticated:
+            auth_logout(self.request)
+
         next_url = request.GET.get('next')
         app = None
         oidc_client = None
