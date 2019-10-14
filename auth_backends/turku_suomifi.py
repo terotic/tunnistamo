@@ -41,11 +41,11 @@ class TurkuSuomiFiAuth(LegacyAuth):
         out['last_name'] = attrs.get('sn', None)
         birthdate = attrs.get('nationalIdentificationNumber', '')
         if birthdate:
-            m = re.match(r'([0-9]{2})([0-9]{2})([0-9]{2})([+-])', birthdate)
+            m = re.match(r'([0-9]{2})([0-9]{2})([0-9]{2})([A-])', birthdate)
             if not m:
                 raise AuthFailed(self, 'Invalid birth date: %s' % birthdate)
             day, month, year, century = m.groups()
-            if century == '+':
+            if century == 'A':
                 year = '20' + year
             else:
                 year = '19' + year
