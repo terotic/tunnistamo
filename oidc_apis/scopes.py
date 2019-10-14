@@ -75,10 +75,10 @@ class AdGroupsScopeClaims(ScopeClaims):
 class ReducedStandardScopeClaims(StandardScopeClaims):
     info_profile = (
         _('Basic profile'),
-        _('Access to your basic information. Includes names and possibly a user picture.'),
+        _('Access to your basic information, which includes your first and last names.'),
     )
     info_email = (
-        _('Email'),
+        _('Email address'),
         _('Access to your email address.'),
     )
     info_phone = (
@@ -88,6 +88,10 @@ class ReducedStandardScopeClaims(StandardScopeClaims):
     info_address = (
         _('Address information'),
         _('Access to your address. Includes country, locality, street and other information.'),
+    )
+    info_birthdate = (
+        _('Birthdate'),
+        _('Access to your birthdate.')
     )
 
     def scope_profile(self):
@@ -114,6 +118,9 @@ class ReducedStandardScopeClaims(StandardScopeClaims):
 
     def scope_address(self):
         return super().scope_address()
+
+    def scope_birthdate(self):
+        return {'birthdate': self.userinfo.get('birthdate')}
 
 
 class SuomiFiUserAttributeScopeClaimsMeta(type):

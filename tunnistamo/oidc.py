@@ -40,6 +40,11 @@ def get_userinfo(claims, user):
     claims['preferred_username'] = None
     claims['nickname'] = user.get_short_name()
 
+    if user.birthdate:
+        claims['birthdate'] = user.birthdate.isoformat()
+    else:
+        claims['birthdate'] = None
+
     # Locale (None for now, but might want to set this in the future)
     claims['locale'] = None
 
