@@ -4,7 +4,7 @@ from urllib.parse import parse_qs, urlparse
 
 from django.conf import settings
 from django.contrib.auth import logout as auth_logout
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import translation
@@ -15,8 +15,7 @@ from jwkest.jws import JWT
 from oauth2_provider.models import get_application_model
 from oidc_provider.lib.endpoints.token import TokenEndpoint
 from oidc_provider.lib.errors import TokenError, UserAuthError
-from oidc_provider.lib.utils.token import client_id_from_id_token
-from oidc_provider.models import Client, Token
+from oidc_provider.models import Client
 from oidc_provider.views import AuthorizeView, EndSessionView
 from social_django.models import UserSocialAuth
 from social_django.utils import load_backend, load_strategy
@@ -106,15 +105,47 @@ class LoginView(TemplateView):
         return context
 
 
+def create_logout_response(request, user, backend_name, redirect_uri):
+    backend = load_backend(load_strategy(request), backend_name, redirect_uri=None)
+
+    # social_auth creates a new user for each (provider, uid) pair so
+    # we don't need to worry about duplicates
+    try:
+        social_user = UserSocialAuth.objects.get(user=user, provider=backend_name)
+    except UserSocialAuth.DoesNotExist:
+        return None
+
+    if not hasattr(backend, 'create_logout_response'):
+        return None
+
+    return backend.create_logout_response(social_user, redirect_uri)
+
+
 class LogoutView(TemplateView):
     template_name = 'logout_done.html'
 
     def get(self, *args, **kwargs):
+        user = self.request.user
+        backend_name = None
+        if user.is_authenticated:
+            backend_name = self.request.session.get('social_auth_last_login_backend', None)
+
         if self.request.user.is_authenticated:
             auth_logout(self.request)
-        url = self.request.GET.get('next')
-        if url and re.match(r'http[s]?://', url):
-            return redirect(url)
+
+        redirect_uri = self.request.GET.get('next')
+        if redirect_uri and not re.match(r'http[s]?://', redirect_uri):
+            redirect_uri = None
+
+        if backend_name:
+            logout_response = create_logout_response(
+                self.request, user, backend_name, redirect_uri
+            )
+            if logout_response is not None:
+                return logout_response
+
+        if redirect_uri:
+            return redirect(redirect_uri)
         return super(LogoutView, self).get(*args, **kwargs)
 
 
@@ -158,53 +189,20 @@ class TunnistamoOidcAuthorizeView(AuthorizeView):
 
 class TunnistamoOidcEndSessionView(EndSessionView):
     def dispatch(self, request, *args, **kwargs):
-        # check if the authenticated user has active Suomi.fi login
+        backend_name = None
         user = request.user
-        social_user = None
-        if request.user.is_authenticated:
-            # social_auth creates a new user for each (provider, uid) pair so
-            # we don't need to worry about duplicates
-            try:
-                social_user = UserSocialAuth.objects.get(user=user, provider='suomifi')
-            except UserSocialAuth.DoesNotExist:
-                pass
+        if user.is_authenticated:
+            backend_name = self.request.session.get('social_auth_last_login_backend', None)
+
         # clear Django session and get redirect URL
         response = super().dispatch(request, *args, **kwargs)
-        # create Suomi.fi logout redirect if needed
-        if social_user is not None:
-            response = self._create_suomifi_logout_response(social_user, user, request, response.url)
-        return response
 
-    @staticmethod
-    def _create_suomifi_logout_response(social_user, user, request, redirect_url):
-        """Creates Suomi.fi logout redirect response for given social_user
-        and removes all related OIDC tokens. The user is directed to redirect_url
-        after succesful Suomi.fi logout.
-        """
-        token = ''
-        saml_backend = load_backend(
-            load_strategy(request),
-            'suomifi',
-            redirect_uri=getattr(settings, 'LOGIN_URL')
-        )
-
-        id_token_hint = request.GET.get('id_token_hint')
-        if id_token_hint:
-            client_id = client_id_from_id_token(id_token_hint)
-            try:
-                client = Client.objects.get(client_id=client_id)
-                if redirect_url in client.post_logout_redirect_uris:
-                    token = saml_backend.create_return_token(
-                        client_id,
-                        client.post_logout_redirect_uris.index(redirect_url))
-            except Client.DoesNotExist:
-                pass
-
-        response = saml_backend.create_logout_redirect(social_user, token)
-
-        for token in Token.objects.filter(user=user):
-            if token.id_token.get('aud') == client_id:
-                token.delete()
+        if backend_name is not None:
+            # If the backend supports logout, ask it to generate a logout
+            # response to pass to the browser.
+            backend_response = create_logout_response(request, user, backend_name, response.url)
+            if backend_response is not None:
+                response = backend_response
 
         return response
 

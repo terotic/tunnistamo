@@ -2,6 +2,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.urls import reverse
 from social_django.utils import load_backend, load_strategy
+from django.views.decorators.csrf import csrf_exempt
 
 
 def suomifi_metadata_view(request):
@@ -16,10 +17,11 @@ def suomifi_metadata_view(request):
         return HttpResponse(content=metadata, content_type='text/xml')
 
 
-def suomifi_logout_view(request, uuid=None):
-    saml_backend = load_backend(
+@csrf_exempt
+def logout_view(request, backend):
+    backend_obj = load_backend(
         load_strategy(request),
-        'suomifi',
+        backend,
         redirect_uri=getattr(settings, 'LOGIN_URL'),
     )
-    return saml_backend.process_logout_message()
+    return backend_obj.logout_complete()

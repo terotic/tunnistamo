@@ -4,8 +4,9 @@ import logging
 from defusedxml.lxml import fromstring, tostring
 from django.urls import reverse
 from lxml import etree
-from oidc_provider.models import Client
+from oidc_provider.models import Client, Token
 from social_core.backends.saml import SAMLAuth, SAMLIdentityProvider
+from oidc_provider.lib.utils.token import client_id_from_id_token
 
 from auth_backends.models import SuomiFiUserAttribute
 
@@ -163,9 +164,11 @@ class SuomiFiSAMLAuth(SAMLAuth):
         methods."""
         config = super().generate_saml_config(idp)
         config['sp']['assertionConsumerService']['url'] = self.strategy.absolute_uri(
-                reverse('social:complete', args=('suomifi',)))
+            reverse('social:complete', args=(self.name,))
+        )
+        logout_uri = reverse('auth_backends:logout_callback', kwargs=dict(backend=self.name))
         config['sp']['singleLogoutService'] = {
-            'url': self.strategy.absolute_uri(reverse('auth_backends:suomifi_logout_callback')),
+            'url': self.strategy.absolute_uri(logout_uri),
             'binding': 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
         }
         for attribute in self.setting('ENTITY_ATTRIBUTES'):
@@ -326,7 +329,7 @@ class SuomiFiSAMLAuth(SAMLAuth):
         social_user.save()
         return self.strategy.redirect(redirect)
 
-    def process_logout_message(self):
+    def logout_complete(self):
         """Processes SLO SAML message. Returns next step redirect."""
         idp = self.get_idp('suomifi')
         auth = self._create_saml_auth(idp=idp)
@@ -341,3 +344,29 @@ class SuomiFiSAMLAuth(SAMLAuth):
                 logger.info('Could not deduce return URI, using default value: {}'.format(self.redirect_uri))
                 redirect = self.redirect_uri
         return self.strategy.redirect(redirect)
+
+    def create_logout_response(self, social_user, redirect_uri):
+        """Creates Suomi.fi logout redirect response for given social_user
+        and removes all related OIDC tokens. The user is directed to redirect_url
+        after succesful Suomi.fi logout.
+        """
+        request = self.strategy.request
+        id_token_hint = request.GET.get('id_token_hint')
+        if id_token_hint:
+            client_id = client_id_from_id_token(id_token_hint)
+            try:
+                client = Client.objects.get(client_id=client_id)
+                if redirect_uri in client.post_logout_redirect_uris:
+                    token = self.create_return_token(
+                        client_id,
+                        client.post_logout_redirect_uris.index(redirect_uri))
+            except Client.DoesNotExist:
+                pass
+
+        response = self.create_logout_redirect(social_user, token)
+
+        for token in Token.objects.filter(user=social_user.user):
+            if client_id and token.id_token.get('aud') == client_id:
+                token.delete()
+
+        return response

@@ -7,7 +7,7 @@ from urllib.parse import urlencode
 from datetime import datetime, date
 
 import requests
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.exceptions import ImproperlyConfigured
 from django.urls import reverse
 from social_core.backends.legacy import LegacyAuth
@@ -25,6 +25,11 @@ class TurkuSuomiFiAuth(LegacyAuth):
 
     def get_user_id(self, details, response):
         return response['oid']
+
+    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
+        data = super().extra_data(user, uid, response, details, *args, **kwargs)
+        data['session_index'] = response.get('session_index')
+        return data
 
     def get_user_details(self, response):
         out = {}
@@ -44,25 +49,21 @@ class TurkuSuomiFiAuth(LegacyAuth):
             out['birthdate'] = date(int(year), int(month), int(day))
         return out
 
-    def api_post(self, path):
+    def api_post(self, path, params, relay_state):
         url = '%s/%s' % (self.setting('API_URL'), path)
         now = datetime.utcnow().isoformat().split('.')[0] + 'Z'
         message_id = 'T' + str(uuid.uuid4())
         sp_name = self.setting('SP_NAME')
 
-        callback_url = reverse('social:complete', kwargs=dict(backend=self.name))
-        callback_url = self.strategy.build_absolute_uri(callback_url)
-
         data = {
             'message_id': message_id,
-            'callback_url': callback_url,
             'timestamp': now,
-            'language': 'fi',
         }
+        data.update(params)
         msg = json.dumps(data)
         msg_body = urlencode({
             'SAMLRequest': base64.b64encode(msg.encode('utf8')).decode('utf8'),
-            'RelayState': 'abdefg',
+            'RelayState': relay_state,
         })
         auth_line = (sp_name + now + msg_body + self.setting('API_KEY')).encode('utf8')
         auth = hashlib.sha256(auth_line).hexdigest()
@@ -82,7 +83,17 @@ class TurkuSuomiFiAuth(LegacyAuth):
             if not self.setting(setting_name):
                 raise ImproperlyConfigured('Required setting %s not found' % setting_name)
 
-        resp = self.api_post('esuomifi/v1/authnrequest/simple')
+        callback_url = reverse('social:complete', kwargs=dict(backend=self.name))
+        callback_url = self.strategy.build_absolute_uri(callback_url)
+
+        params = {
+            'callback_url': callback_url,
+            'language': 'fi',  # FIXME
+        }
+
+        # FIXME: generate proper nonce
+        relay_state = 'abcdefg'
+        resp = self.api_post('esuomifi/v1/authnrequest/simple', params, relay_state)
         resp.raise_for_status()
 
         return HttpResponse(resp.content)
@@ -91,6 +102,7 @@ class TurkuSuomiFiAuth(LegacyAuth):
         if 'SAMLResponse' not in self.data:
             raise AuthMissingParameter(self, 'SAMLResponse')
 
+        # FIXME: verify AuthCode
         resp = base64.b64decode(self.data['SAMLResponse']).decode('utf8')
         data = json.loads(resp)
         status_code = data.get('status_code', '')
@@ -108,3 +120,23 @@ class TurkuSuomiFiAuth(LegacyAuth):
         }
         kwargs.update({'response': response, 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
+
+    def create_logout_response(self, social_user, redirect_uri):
+        session_index = social_user.extra_data.get('session_index')
+        if not session_index:
+            return None
+
+        logout_complete_uri = reverse('auth_backends:logout_callback', kwargs=dict(backend=self.name))
+        params = {
+            'callback_url': self.strategy.absolute_uri(logout_complete_uri),
+            'session_index': session_index,
+        }
+
+        resp = self.api_post('esuomifi/v1/logoutrequest/simple', params, relay_state=redirect_uri)
+        resp.raise_for_status()
+        return HttpResponse(resp)
+
+    def logout_complete(self):
+        # FIXME: verify AuthCode
+        redirect_uri = self.data['RelayState']
+        return HttpResponseRedirect(redirect_uri)
