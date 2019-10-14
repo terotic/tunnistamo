@@ -152,6 +152,9 @@ class SuomiFiSAMLAuth(SAMLAuth):
     name = 'suomifi'
     EXTRA_DATA = ['name_id']
 
+    def is_email_needed(*args, **kwargs):
+        return False
+
     def get_idp(self, idp_name):
         """Given the name of an IdP, get a SuomiFiSAMLIdentityProvider instance.
         Overrides the base class method."""
