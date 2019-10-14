@@ -19,9 +19,12 @@ logger = logging.getLogger(__name__)
 
 
 class User(AbstractUser):
+    # Override first_name to allow it to be longer
+    first_name = models.CharField(_('first name'), max_length=100, blank=True)
+
     primary_sid = models.CharField(max_length=100, unique=True)
     last_login_backend = models.CharField(max_length=100, null=True, blank=True)
-    birthdate = models.DateField(null=True, blank=True, verbose_name=_('birth date'))
+    birthdate = models.DateField(null=True, blank=True, verbose_name=_('birthdate'))
 
     def save(self, *args, **kwargs):
         if not self.primary_sid:
