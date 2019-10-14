@@ -9,7 +9,10 @@ from datetime import datetime, date
 import requests
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.exceptions import ImproperlyConfigured
+from django.conf import settings
+from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.urls import reverse
+from social_core.utils import handle_http_errors
 from social_core.backends.legacy import LegacyAuth
 from social_core.exceptions import AuthMissingParameter, AuthFailed
 
@@ -84,6 +87,8 @@ class TurkuSuomiFiAuth(LegacyAuth):
                 raise ImproperlyConfigured('Required setting %s not found' % setting_name)
 
         callback_url = reverse('social:complete', kwargs=dict(backend=self.name))
+        if REDIRECT_FIELD_NAME in self.data:
+            callback_url += '?' + urlencode({REDIRECT_FIELD_NAME: self.data[REDIRECT_FIELD_NAME]})
         callback_url = self.strategy.build_absolute_uri(callback_url)
 
         params = {
@@ -98,6 +103,7 @@ class TurkuSuomiFiAuth(LegacyAuth):
 
         return HttpResponse(resp.content)
 
+    @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         if 'SAMLResponse' not in self.data:
             raise AuthMissingParameter(self, 'SAMLResponse')
@@ -132,11 +138,13 @@ class TurkuSuomiFiAuth(LegacyAuth):
             'session_index': session_index,
         }
 
-        resp = self.api_post('esuomifi/v1/logoutrequest/simple', params, relay_state=redirect_uri)
+        resp = self.api_post('esuomifi/v1/logoutrequest/simple', params, relay_state=redirect_uri or '')
         resp.raise_for_status()
         return HttpResponse(resp)
 
     def logout_complete(self):
         # FIXME: verify AuthCode
         redirect_uri = self.data['RelayState']
-        return HttpResponseRedirect(redirect_uri)
+        if redirect_uri == 'null':
+            redirect_uri = None
+        return HttpResponseRedirect(redirect_uri or settings.LOGIN_REDIRECT_URL)
