@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load static compress i18n %}{% get_current_language as LANGUAGE_CODE %}
+{% load bootstrap4 static compress i18n %}{% get_current_language as LANGUAGE_CODE %}
 <html lang="{{ LANGUAGE_CODE }}">
 
 <head>
@@ -25,12 +25,27 @@
             <div class="logo theme-logo"></div>
             <h1 class="service-title">Tunnistamo</h1>
           </header>
+          {% if messages %}
+          <div class="messages">
+              {% for message in messages %}
+              <div class="{{ message|bootstrap_message_classes }} alert-dismissible fade show">
+                <div>{{ message }}</div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              {% endfor %}
+          </div>
+          {% endif %}
           {% block body_content %}{% endblock %}
         </div>
       </div>
     </div>
   </div>
+  {% compress js %}
+  <script type='text/javascript' src="{% static 'admin/js/vendor/jquery/jquery.min.js' %}"></script>
+  <script type='text/javascript' src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+  {% endcompress %}
+  {% block extrascript %}{% endblock %}
 </body>
-
-{% block extrascript %}{% endblock %}
 </html>

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tunnistamo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-20 16:52+0300\n"
+"POT-Creation-Date: 2019-10-20 17:45+0300\n"
 "PO-Revision-Date: 2019-04-17 07:55+0000\n"
 "Last-Translator: Timo Tuominen <dev@hel.fi>, 2019\n"
 "Language-Team: Finnish (https://www.transifex.com/city-of-helsinki-1/teams/98217/fi/)\n"
@@ -356,6 +356,10 @@ msgstr "palvelut"
 #: services/models.py
 msgid "Cannot set both application and client."
 msgstr "Molempia \"application\" ja \"client\" ei voi asettaa."
+
+#: tunnistamo/middleware.py
+msgid "Authentication failed."
+msgstr "Tunnistautuminen epäonnistui."
 
 #: tunnistamo/utils.py
 #, python-format

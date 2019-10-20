@@ -5,6 +5,7 @@ from django.conf import settings
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.utils import timezone
 from django.utils.http import quote
+from django.utils.translation import ugettext_lazy as _
 from oidc_provider.lib.errors import BearerTokenError
 from social_django.middleware import SocialAuthExceptionMiddleware
 
@@ -26,6 +27,9 @@ class InterruptedSocialAuthMiddleware(SocialAuthExceptionMiddleware):
         strategy = getattr(request, 'social_strategy', None)
         if strategy is not None:
             return strategy.setting('RAISE_EXCEPTIONS')
+
+    def get_message(self, request, exception):
+        return _('Authentication failed.')
 
 
 class OIDCExceptionMiddleware(object):

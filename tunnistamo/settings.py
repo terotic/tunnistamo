@@ -232,6 +232,7 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'npm.finders.NpmFinder',
     'compressor.finders.CompressorFinder',
 )
 
@@ -261,6 +262,10 @@ BOOTSTRAP4 = {
     'javascript_url': None,
     'include_jquery': False,
     'success_css_class': None,
+}
+
+NPM_FILE_PATTERNS = {
+    'bootstrap': ['dist/js/*'],
 }
 
 
