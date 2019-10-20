@@ -3,6 +3,7 @@ import base64
 import json
 import uuid
 import hashlib
+from importlib import import_module
 from urllib.parse import urlencode
 from datetime import datetime, date
 
@@ -14,11 +15,30 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.urls import reverse
 from social_core.utils import handle_http_errors
 from social_core.backends.legacy import LegacyAuth
-from social_core.exceptions import AuthMissingParameter, AuthFailed
+from social_core.exceptions import (
+    AuthMissingParameter, AuthFailed, AuthStateForbidden
+)
+
+
+session_engine = import_module(settings.SESSION_ENGINE)
+
+
+class SuomiFiAssociation(object):
+    """ Use Association model to save the nonce by force."""
+
+    def __init__(self, handle, secret='', issued=0, lifetime=0, assoc_type=''):
+        self.handle = handle  # as nonce
+        self.secret = secret.encode()  # not use
+        self.issued = issued  # not use
+        self.lifetime = lifetime  # not use
+        self.assoc_type = assoc_type  # as state
 
 
 class TurkuSuomiFiAuth(LegacyAuth):
     name = 'turku_suomifi'
+
+    def api_url(self):
+        return self.setting('API_URL')
 
     def uses_redirect(self):
         return False
@@ -53,7 +73,7 @@ class TurkuSuomiFiAuth(LegacyAuth):
         return out
 
     def api_post(self, path, params, relay_state):
-        url = '%s/%s' % (self.setting('API_URL'), path)
+        url = '%s/%s' % (self.api_url(), path)
         now = datetime.utcnow().isoformat().split('.')[0] + 'Z'
         message_id = 'T' + str(uuid.uuid4())
         sp_name = self.setting('SP_NAME')
@@ -80,6 +100,28 @@ class TurkuSuomiFiAuth(LegacyAuth):
         resp = requests.post(url, headers=headers, data=msg_body)
         return resp
 
+    def get_and_store_nonce(self, url, secret):
+        # Create a nonce
+        nonce = self.strategy.random_string(64)
+        # Store the nonce
+        association = SuomiFiAssociation(nonce, secret=secret)
+        self.strategy.storage.association.store(url, association)
+        return nonce
+
+    def get_nonce(self, nonce):
+        try:
+            obj = self.strategy.storage.association.get(
+                server_url=self.api_url(),
+                handle=nonce
+            )[0]
+            obj.secret = base64.b64decode(obj.secret).decode()
+            return obj
+        except IndexError:
+            pass
+
+    def remove_nonce(self, nonce_id):
+        self.strategy.storage.association.remove([nonce_id])
+
     def auth_html(self):
         REQUIRED_SETTINGS = ['API_URL', 'API_KEY', 'SP_NAME']
         for setting_name in REQUIRED_SETTINGS:
@@ -91,13 +133,25 @@ class TurkuSuomiFiAuth(LegacyAuth):
             callback_url += '?' + urlencode({REDIRECT_FIELD_NAME: self.data[REDIRECT_FIELD_NAME]})
         callback_url = self.strategy.build_absolute_uri(callback_url)
 
+        # When the session cookies is set with SameSite=lax, we lose access
+        # to the cookie when the User Agent returns with the SAML response
+        # (through a POST request). We store the session ID in the database
+        # and refer to it with a randomly generated nonce that we store
+        # in the RelayState SAML parameter.
+
+        session = self.strategy.request.session
+        # If the session hasn't ever been saved, it doesn't have a session
+        # key yet.
+        if not session.is_empty() and not session.session_key:
+            session.save()
+        relay_state = self.get_and_store_nonce(self.api_url(), session.session_key or '')
+
         params = {
             'callback_url': callback_url,
             'language': 'fi',  # FIXME
         }
 
         # FIXME: generate proper nonce
-        relay_state = 'abcdefg'
         resp = self.api_post('esuomifi/v1/authnrequest/simple', params, relay_state)
         resp.raise_for_status()
 
@@ -107,8 +161,24 @@ class TurkuSuomiFiAuth(LegacyAuth):
     def auth_complete(self, *args, **kwargs):
         if 'SAMLResponse' not in self.data:
             raise AuthMissingParameter(self, 'SAMLResponse')
+        if 'RelayState' not in self.data:
+            raise AuthMissingParameter(self, 'RelayState')
+
+        nonce = self.data['RelayState']
+        nonce_obj = self.get_nonce(nonce)
+        if not nonce_obj:
+            raise AuthStateForbidden(self, 'Invalid nonce in RelayState: %s' % nonce)
+
+        # Remove the association object to prevent re-use attacks.
+        self.remove_nonce(nonce_obj.id)
+
+        request = self.strategy.request
+        if not request.session.session_key and nonce_obj.secret:
+            session = session_engine.SessionStore(nonce_obj.secret)
+            request.session = self.strategy.session = session
 
         # FIXME: verify AuthCode
+
         resp = base64.b64decode(self.data['SAMLResponse']).decode('utf8')
         data = json.loads(resp)
         status_code = data.get('status_code', '')
