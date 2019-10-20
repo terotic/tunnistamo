@@ -3,7 +3,6 @@ import oidc_provider.urls
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.http import HttpResponse
 from django.urls import include, path, re_path
 from django.utils import translation
 from django.views.decorators.csrf import csrf_exempt
@@ -23,7 +22,7 @@ from tunnistamo import social_auth_urls
 from users.api import TunnistamoAuthorizationView, UserConsentViewSet, UserLoginEntryViewSet
 from users.views import (
     EmailNeededView, LoginView, LogoutView, TunnistamoOidcAuthorizeView, TunnistamoOidcEndSessionView,
-    TunnistamoOidcTokenView, show_profile
+    TunnistamoOidcTokenView, RememberMeView, show_profile
 )
 
 from .api import GetJWTView, UserView
@@ -49,6 +48,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-tokens/', get_api_tokens_view),
     path('profile/', show_profile),
+    path('set-remember-me/', RememberMeView.as_view(), name='set_remember_me'),
     path('accounts/login/', LoginView.as_view()),
     path('accounts/logout/', LogoutView.as_view()),
     path('accounts/', include(auth_backends.urls, namespace='auth_backends')),

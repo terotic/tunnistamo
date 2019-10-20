@@ -13,6 +13,7 @@
 {% compress css %}
     <link type="text/x-scss" rel="stylesheet" href="/static/styles/themes/{{ tunnistamo_theme }}/main.scss" charset="utf-8">
 {% endcompress %}
+{% block extrastyle %}{% endblock %}
 </head>
 
 <body class="bg-brand-light">
@@ -31,4 +32,5 @@
   </div>
 </body>
 
+{% block extrascript %}{% endblock %}
 </html>

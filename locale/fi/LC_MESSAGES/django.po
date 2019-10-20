@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tunnistamo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-14 20:40+0300\n"
+"POT-Creation-Date: 2019-10-20 16:52+0300\n"
 "PO-Revision-Date: 2019-04-17 07:55+0000\n"
 "Last-Translator: Timo Tuominen <dev@hel.fi>, 2019\n"
 "Language-Team: Finnish (https://www.transifex.com/city-of-helsinki-1/teams/98217/fi/)\n"
@@ -372,7 +372,11 @@ msgid "Users"
 msgstr "Käyttäjät"
 
 #: users/models.py
-msgid "birth date"
+msgid "first name"
+msgstr "etunimi"
+
+#: users/models.py
+msgid "birthdate"
 msgstr "syntymäaika"
 
 #: users/models.py
@@ -402,6 +406,22 @@ msgstr "kirjautumismerkintä"
 #: users/models.py
 msgid "user login entries"
 msgstr "kirjautumismerkinnät"
+
+#: users/templates/login.html
+msgid "Log in"
+msgstr "Kirjaudu sisään"
+
+#: users/templates/login.html
+msgid "You may authenticate to this service by using one of the following login methods."
+msgstr "Tähän palveluun voit tunnistautua käyttämällä jotain näistä kirjautumistavoista."
+
+#: users/templates/login.html
+msgid "Remember me on this device"
+msgstr "Muista minut tällä laitteella"
+
+#: users/templates/login.html
+msgid "If you are on a shared computer, you should not check this box."
+msgstr "Jos olet yhteiskäyttötietokoneella, älä ruksi tätä."
 
 #: users/templates/oidc_provider/authorize.html
 msgid "Permission request"

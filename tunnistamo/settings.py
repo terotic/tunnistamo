@@ -218,6 +218,14 @@ LOGIN_REDIRECT_URL = '/profile/'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 AUTH_USER_MODEL = 'users.User'
 
+# When should the session expire if the user has requested that we remember
+# them?
+SESSION_COOKIE_AGE_REMEMBER_ME = 7 * 24 * 3600  # 7 days
+# Expiration time when "remember me" is not requested
+SESSION_COOKIE_AGE = 30 * 60  # 30 mins
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 

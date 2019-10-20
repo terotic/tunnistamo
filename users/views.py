@@ -11,6 +11,7 @@ from django.utils import translation
 from django.utils.http import quote
 from django.views.generic import View
 from django.views.generic.base import TemplateView
+from django.views.decorators.cache import never_cache
 from jwkest.jws import JWT
 from oauth2_provider.models import get_application_model
 from oidc_provider.lib.endpoints.token import TokenEndpoint
@@ -256,3 +257,20 @@ def show_profile(request):
     else:
         attrs = {}
     return render(request, 'account/profile.html', context=dict(attrs=attrs))
+
+
+class RememberMeView(View):
+    @never_cache
+    def post(self, request, *args, **kwargs):
+        remember_me = request.POST.get('remember_me', '')
+        if not remember_me:
+            return HttpResponseBadRequest()
+        if remember_me.strip().lower() == 'true':
+            remember_me = True
+        else:
+            remember_me = False
+
+        session = request.session
+        session['remember_me'] = remember_me
+
+        return HttpResponse()

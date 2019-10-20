@@ -1,13 +1,36 @@
 {% extends 'base.html' %}
-{% load svg %}
+{% load svg i18n static %}
 
-{% block title %}Kirjaudu sisään{% endblock %}
+{% block title %}{% trans "Log in" %}{% endblock %}
+
+{% block extrastyle %}
+<style>
+  #spinner {
+    width: 1rem;
+    height: 1rem;
+    margin-left: -1.25rem;
+  }
+  #remember-me-section {
+    margin-bottom: 1rem;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
 <p class="doc">
-  Tähän palveluun voit tunnistautua käyttämällä jotain näistä
-  kirjautumistavoista.
+  {% blocktrans %}You may authenticate to this service by using one of the following login methods.{% endblocktrans %}
 </p>
+<div id="remember-me-section">
+  <form id="remember-me-form">
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="remember-me-checkbox">
+      <label class="form-check-label" for="remember-me-checkbox">{% trans "Remember me on this device" %}</label>
+      <small class="form-text text-muted">{% blocktrans %}If you are on a shared computer, you should not check this box.{% endblocktrans %}</small>
+    </div>
+    {% csrf_token %}
+  </form>
+</div>
+
 <div class="hel-login-methods">
   {% for method in login_methods %}
   <div class="login-method login-method-{{ method.provider_id }}
@@ -43,4 +66,46 @@
   </div>
   {% endfor %}
 </div>
+{% endblock %}
+
+{% block extrascript %}
+<script src="{% static 'admin/js/vendor/jquery/jquery.min.js' %}"></script>
+
+<script>
+  var csrftoken = $("#remember-me-form [name=csrfmiddlewaretoken]").val();
+  var spinner = $('<div id="spinner" class="spinner-border" role="status"></div>') ;
+
+  $('#remember-me-checkbox').click(function(ev) {
+    var el = ev.currentTarget;
+    var previousState = !el.checked;
+    var timeout = setTimeout(function() {
+      $(el).after(spinner);
+      $(el).hide();
+    }, 50);
+
+    function removeSpinner() {
+      clearTimeout(timeout);
+      $(el).show();
+      $(spinner).remove();
+    }
+
+    $.ajax({
+      url: "{% url 'set_remember_me' %}",
+      type: 'POST',
+      headers: {
+        'X-CSRFToken': csrftoken,
+      },
+      data: {
+        "remember_me": el.checked,
+      },
+      success: function(data, status, xhr) {
+        removeSpinner();
+      },
+      error: function(data, status, xhr) {
+        removeSpinner();
+        $(el).prop('checked', previousState);
+      }
+    });
+  });
+</script>
 {% endblock %}
