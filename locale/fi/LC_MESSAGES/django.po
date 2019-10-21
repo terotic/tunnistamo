@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tunnistamo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-20 17:45+0300\n"
+"POT-Creation-Date: 2019-10-21 08:32+0300\n"
 "PO-Revision-Date: 2019-04-17 07:55+0000\n"
 "Last-Translator: Timo Tuominen <dev@hel.fi>, 2019\n"
 "Language-Team: Finnish (https://www.transifex.com/city-of-helsinki-1/teams/98217/fi/)\n"
@@ -54,8 +54,8 @@ msgid "Library card identifier"
 msgstr "Kirjastokortin tunnus"
 
 #: auth_backends/axiell_aurora.py
-msgid "Card identifier"
-msgstr "Kortin tunnus"
+msgid "Card PIN"
+msgstr "Kortin PIN-koodi"
 
 #: auth_backends/axiell_aurora.py
 msgid "Library card login unavailable. Please try again later."
@@ -67,7 +67,7 @@ msgstr "Väärä kortinnumero tai PIN-koodi"
 
 #: auth_backends/templates/axiell_aurora/login.html
 msgid "Login"
-msgstr "Kirjautuminen"
+msgstr "Kirjaudu"
 
 #: devices/models.py identities/models.py users/models.py
 msgid "user"
@@ -443,6 +443,3 @@ msgstr "Älä anna lupaa"
 #: users/templates/oidc_provider/authorize.html
 msgid "Allow"
 msgstr "Anna lupa"
-
-#~ msgid "PIN"
-#~ msgstr "Tunnusluku (PIN)"
