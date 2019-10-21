@@ -13,6 +13,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.urls import reverse
+from django.utils import translation
 from social_core.utils import handle_http_errors
 from social_core.backends.legacy import LegacyAuth
 from social_core.exceptions import (
@@ -146,9 +147,13 @@ class TurkuSuomiFiAuth(LegacyAuth):
             session.save()
         relay_state = self.get_and_store_nonce(self.api_url(), session.session_key or '')
 
+        language = translation.get_language()
+        if language not in ('fi', 'en', 'sv'):
+            language = 'fi'
+
         params = {
             'callback_url': callback_url,
-            'language': 'fi',  # FIXME
+            'language': language
         }
 
         # FIXME: generate proper nonce
