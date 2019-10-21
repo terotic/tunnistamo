@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
+import parler.models
 
 
 class Migration(migrations.Migration):
@@ -18,6 +19,8 @@ class Migration(migrations.Migration):
                 ('provider_id', models.CharField(unique=True, max_length=50)),
                 ('name', models.CharField(max_length=100)),
             ],
+            # Workaround for a bug in parler
+            bases=(parler.models.TranslatableModel, models.Model),
         ),
         migrations.AddField(
             model_name='application',
