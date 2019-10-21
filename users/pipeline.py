@@ -101,6 +101,12 @@ def associate_by_email(strategy, details, user=None, *args, **kwargs):
 
     backend = kwargs['backend']
 
+    # If the backend does not require email address to be provided in the
+    # first place, do not require uniqueness.
+    if hasattr(backend, 'is_email_needed'):
+        if not backend.is_email_needed(user=user, **kwargs):
+            return
+
     User = get_user_model()  # noqa
     existing_users = User.objects.filter(email__iexact=email).order_by('-date_joined')
     if not existing_users:
