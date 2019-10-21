@@ -5,13 +5,13 @@ import uuid
 
 from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from helusers.models import AbstractUser
 from ipware import get_client_ip
 from oauth2_provider.models import AbstractApplication
 from oidc_provider.models import Client
+from parler.models import TranslatableModel, TranslatedFields
 
 from users.utils import get_geo_location_data_for_ip
 
@@ -38,16 +38,18 @@ def get_provider_ids():
     return [(name, name) for name in load_backends(settings.AUTHENTICATION_BACKENDS).keys()]
 
 
-@python_2_unicode_compatible
-class LoginMethod(models.Model):
+class LoginMethod(TranslatableModel):
     provider_id = models.CharField(
         max_length=50, unique=True,
         choices=sorted(get_provider_ids()))
-    name = models.CharField(max_length=100)
     background_color = models.CharField(max_length=50, null=True, blank=True)
     logo_url = models.URLField(null=True, blank=True)
-    short_description = models.TextField(null=True, blank=True)
     order = models.PositiveIntegerField(null=True)
+
+    translations = TranslatedFields(
+        name=models.CharField(verbose_name=_('name'), max_length=100),
+        short_description=models.TextField(verbose_name=_('short description'), null=True, blank=True),
+    )
 
     def __str__(self):
         return "{} ({})".format(self.name, self.provider_id)
