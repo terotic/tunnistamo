@@ -49,7 +49,7 @@ urlpatterns = [
     path('api-tokens/', get_api_tokens_view),
     path('profile/', show_profile),
     path('set-remember-me/', RememberMeView.as_view(), name='set_remember_me'),
-    path('accounts/login/', LoginView.as_view()),
+    path('accounts/login/', LoginView.as_view(), name='login'),
     path('accounts/logout/', LogoutView.as_view()),
     path('accounts/', include(auth_backends.urls, namespace='auth_backends')),
     path('accounts/', include(social_auth_urls, namespace='social')),

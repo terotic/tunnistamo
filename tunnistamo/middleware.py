@@ -4,8 +4,9 @@ from datetime import timedelta
 from django.conf import settings
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.utils import timezone
-from django.utils.http import quote
+from django.utils.http import urlencode, is_safe_url
 from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
 from oidc_provider.lib.errors import BearerTokenError
 from social_django.middleware import SocialAuthExceptionMiddleware
 
@@ -13,20 +14,18 @@ logger = logging.getLogger(__name__)
 
 
 class InterruptedSocialAuthMiddleware(SocialAuthExceptionMiddleware):
-    # Override get_redirect_uri to point the user back to backend selection
-    # instead of non-functioning login page in case of authentication error
     def get_redirect_uri(self, request, exception):
-        strategy = getattr(request, 'social_strategy', None)
-        if strategy.session.get('next') is None:
-            return super().get_redirect_uri(request, exception)
-        url = '/login/?next=' + quote(strategy.session.get('next'))
-        return url
+        strategy = request.social_strategy
+        redirect_uri = reverse('login')
+        next = strategy.session.get('next')
+        if next and is_safe_url(url=next, allowed_hosts={request.get_host()}, require_https=request.is_secure()):
+            redirect_uri += '?%s' % urlencode({next: next})
+        return redirect_uri
 
     # Override raise_exception() to allow redirect also when debug is enabled
     def raise_exception(self, request, exception):
-        strategy = getattr(request, 'social_strategy', None)
-        if strategy is not None:
-            return strategy.setting('RAISE_EXCEPTIONS')
+        strategy = request.social_strategy
+        return strategy.setting('RAISE_EXCEPTIONS')
 
     def get_message(self, request, exception):
         return _('Authentication failed.')
