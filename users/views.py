@@ -178,10 +178,24 @@ class TunnistamoOidcAuthorizeView(AuthorizeView):
 
         for locale in request_locales:
             if locale in available_locales:
-                with translation.override(locale):
-                    return super().get(request, *args, **kwargs)
+                break
+        else:
+            locale = None
 
-        return super().get(request, *args, **kwargs)
+        if locale:
+            translation.activate(locale)
+
+        resp = super().get(request, *args, **kwargs)
+        if locale:
+            # Save the UI language in a dedicated cookie, because the
+            # session will be nuked if we go through the login view.
+            resp.set_cookie(
+                settings.LANGUAGE_COOKIE_NAME, locale,
+                max_age=settings.LANGUAGE_COOKIE_AGE,
+                path=settings.LANGUAGE_COOKIE_PATH,
+                domain=settings.LANGUAGE_COOKIE_DOMAIN,
+            )
+        return resp
 
     def post(self, request, *args, **kwargs):
         request.POST = _extend_scope_in_query_params(request.POST)

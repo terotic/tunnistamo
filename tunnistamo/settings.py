@@ -21,6 +21,7 @@ env = environ.Env(
     DATABASE_URL=(str, 'postgres:///tunnistamo'),
     ALLOWED_HOSTS=(list, []),
 
+    COOKIE_PREFIX=(str, 'sso'),
     STATIC_URL=(str, '/static/'),
     STATIC_ROOT=(str, os.path.join(BASE_DIR, 'static')),
     MEDIA_URL=(str, '/media/'),
@@ -128,6 +129,7 @@ MIDDLEWARE = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'crequest.middleware.CrequestMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'tunnistamo.middleware.InterruptedSocialAuthMiddleware',
     'tunnistamo.middleware.OIDCExceptionMiddleware',
 )
@@ -207,6 +209,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+LANGUAGE_SESSION_KEY = 'ui-language'
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
@@ -343,8 +347,10 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
-CSRF_COOKIE_NAME = 'sso-csrftoken'
-SESSION_COOKIE_NAME = 'sso-sessionid'
+COOKIE_PREFIX = env('SOCIAL_AUTH_FACEBOOK_KEY')
+CSRF_COOKIE_NAME = '%s-csrftoken' % COOKIE_PREFIX
+SESSION_COOKIE_NAME = '%s-sessionid' % COOKIE_PREFIX
+LANGUAGE_COOKIE_NAME = '%s-ui-language' % COOKIE_PREFIX
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_SCHEME', 'https')
 
