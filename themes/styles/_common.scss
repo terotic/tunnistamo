@@ -56,6 +56,10 @@
   }
 }
 
+.login-method-list {
+  border-bottom: 1px solid theme-color("primary");
+}
+
 .login-method {
   margin-bottom: 1em;
 
@@ -66,6 +70,13 @@
   .ext-icon img {
     max-height: 24px;
     max-width: 24px;
+  }
+}
+
+.login-footer {
+  margin-top: 2rem;
+  font-size: 0.8rem;
+  a {
   }
 }
 

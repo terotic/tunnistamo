@@ -14,8 +14,9 @@ from django.views.generic.base import TemplateView
 from django.views.decorators.cache import never_cache
 from jwkest.jws import JWT
 from oauth2_provider.models import get_application_model
+from oidc_provider.lib.endpoints.authorize import AuthorizeEndpoint
 from oidc_provider.lib.endpoints.token import TokenEndpoint
-from oidc_provider.lib.errors import TokenError, UserAuthError
+from oidc_provider.lib import errors as oidc_errors
 from oidc_provider.models import Client
 from oidc_provider.views import AuthorizeView, EndSessionView
 from social_django.models import UserSocialAuth
@@ -24,6 +25,38 @@ from social_django.utils import load_backend, load_strategy
 from oidc_apis.models import ApiScope
 
 from .models import LoginMethod, OidcClientOptions
+
+
+# This is used to pass the request query dict to the OIDC endpoint
+class DummyRequest:
+    def __init__(self, query_dict):
+        self.GET = query_dict
+        self.method = 'GET'
+
+
+def get_return_to_rp_uri(request, redirect_uri_params):
+    """Returns an URI to redirect the browser to if user cancels authentication
+    """
+
+    params = {key: val[0] for key, val in redirect_uri_params.items()}
+    dummy_request = DummyRequest(params)
+    authorize = AuthorizeEndpoint(dummy_request)
+    try:
+        # This will make sure redirect URI is valid.
+        authorize.validate_params()
+    except (
+        oidc_errors.ClientIdError, oidc_errors.RedirectUriError, oidc_errors.AuthorizeError
+    ):
+        return None
+
+    cancel_error = oidc_errors.AuthorizeError(
+        authorize.params['redirect_uri'], 'access_denied', authorize.grant_type
+    )
+    return_uri = cancel_error.create_uri(
+        authorize.params['redirect_uri'],
+        authorize.params['state']
+    )
+    return return_uri
 
 
 class LoginView(TemplateView):
@@ -38,12 +71,14 @@ class LoginView(TemplateView):
         next_url = request.GET.get('next')
         app = None
         oidc_client = None
+        authorize_uri_params = None
+        self.return_to_rp_uri = None
 
         if next_url:
             # Determine application from the 'next' query argument.
             # FIXME: There should be a better way to get the app id.
-            params = parse_qs(urlparse(next_url).query)
-            client_id = params.get('client_id')
+            authorize_uri_params = parse_qs(urlparse(next_url).query)
+            client_id = authorize_uri_params.get('client_id')
 
             if client_id and len(client_id):
                 client_id = client_id[0].strip()
@@ -70,6 +105,8 @@ class LoginView(TemplateView):
                 allowed_methods = client_options.login_methods.all()
             except OidcClientOptions.DoesNotExist:
                 pass
+
+            self.return_to_rp_uri = get_return_to_rp_uri(request, authorize_uri_params)
 
         if allowed_methods is None:
             allowed_methods = LoginMethod.objects.all()
@@ -103,6 +140,7 @@ class LoginView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(LoginView, self).get_context_data(**kwargs)
         context['login_methods'] = self.login_methods
+        context['return_to_rp_uri'] = self.return_to_rp_uri
         return context
 
 
@@ -241,10 +279,9 @@ class TunnistamoOidcTokenView(View):
 
             response = TokenEndpoint.response(dic)
             return response
-
-        except TokenError as error:
+        except oidc_errors.TokenError as error:
             return TokenEndpoint.response(error.create_dict(), status=400)
-        except UserAuthError as error:
+        except oidc_errors.UserAuthError as error:
             return TokenEndpoint.response(error.create_dict(), status=403)
 
 

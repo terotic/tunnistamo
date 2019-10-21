@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tunnistamo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 08:32+0300\n"
+"POT-Creation-Date: 2019-10-21 10:46+0300\n"
 "PO-Revision-Date: 2019-04-17 07:55+0000\n"
 "Last-Translator: Timo Tuominen <dev@hel.fi>, 2019\n"
 "Language-Team: Finnish (https://www.transifex.com/city-of-helsinki-1/teams/98217/fi/)\n"
@@ -426,6 +426,10 @@ msgstr "Muista minut tällä laitteella"
 #: users/templates/login.html
 msgid "If you are on a shared computer, you should not check this box."
 msgstr "Jos olet yhteiskäyttötietokoneella, älä ruksi tätä."
+
+#: users/templates/login.html
+msgid "Return to the originating service"
+msgstr "Palaa asiointipalveluun"
 
 #: users/templates/oidc_provider/authorize.html
 msgid "Permission request"

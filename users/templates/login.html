@@ -31,7 +31,7 @@
   </form>
 </div>
 
-<div class="hel-login-methods">
+<div class="login-method-list">
   {% for method in login_methods %}
   <div class="login-method login-method-{{ method.provider_id }}
               {% if method.order == 0 %}login-method__primary{% endif %}">
@@ -65,6 +65,12 @@
       {% endif %}
   </div>
   {% endfor %}
+</div>
+
+<div class="login-footer">
+  {% if return_to_rp_uri %}
+    <a href="{{ return_to_rp_uri }}"><span aria-hidden="true">⟵ </span>{% trans "Return to the originating service" %}</a>
+  {% endif %}
 </div>
 {% endblock %}
 
