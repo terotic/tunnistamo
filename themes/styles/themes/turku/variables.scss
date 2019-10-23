@@ -51,6 +51,18 @@ $brand-info:      $theme-info;
 $brand-warning:   $theme-warning;
 $brand-danger:    $theme-danger;
 
+$theme-colors: (
+  "primary":    $brand-primary,
+  "secondary":  $turku-primary-yellow,
+  "success":    $theme-success,
+  "info":       $theme-info,
+  "warning":    $theme-warning,
+  "danger":     $theme-danger,
+  "light":      $turku-primary-blue,
+  "dark":       $turku-primary-yellow,
+);
+
+
 $font-family-sans-serif: "Open Sans", Arial, sans-serif;
 $font-family-base:       $font-family-sans-serif;
 
