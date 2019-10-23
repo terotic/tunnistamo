@@ -105,6 +105,7 @@ INSTALLED_APPS = (
 
     'helusers',
     'themes',
+    'content',
 
     'hkijwt',
     'oidc_apis',
@@ -170,7 +171,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
-                'themes.context_processors.theme_variables'
+                'themes.context_processors.theme_variables',
+                'content.context_processors.general_content',
             ],
         },
     },

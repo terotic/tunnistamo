@@ -6,10 +6,7 @@
     <meta charset="utf-8">
     <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge" /><![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        {% block head_title %}{% block title %}{% endblock %} |
-        Helsingin kaupunki{% endblock %}
-    </title>
+    <title>{% block head_title %}{% block title %}{% endblock %} | {{ general_content.site_owner_name|default:"Tunnistamo" }}{% endblock %}</title>
 {% compress css %}
     <link type="text/x-scss" rel="stylesheet" href="/static/styles/themes/{{ tunnistamo_theme }}/main.scss" charset="utf-8">
 {% endcompress %}
