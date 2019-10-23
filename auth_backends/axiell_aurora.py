@@ -1,11 +1,13 @@
 import re
 import logging
 import requests
+from urllib.parse import urlencode
 
 from datetime import date
 from django import forms
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
 from django.shortcuts import render
 from social_core.backends.legacy import LegacyAuth
 from social_core.exceptions import AuthMissingParameter
@@ -98,12 +100,16 @@ class AuroraAuth(LegacyAuth):
                     # Log to sentry
                     logger.exception('Unable to get borrower info', exc_info=err)
                     form.add_error(None, _('Library card login unavailable. Please try again later.'))
-                except AuthenticationFailed as err:
+                except AuthenticationFailed:
                     form.add_error(None, _('Invalid card number or PIN'))
         else:
             form = AuroraLoginForm()
 
-        return render(request, self.FORM_HTML, {'form': form})
+        login_method_uri = reverse('login')
+        if 'next' in self.data:
+            login_method_uri += '?' + urlencode({'next': self.data['next']})
+
+        return render(request, self.FORM_HTML, {'form': form, 'login_method_uri': login_method_uri})
 
     def _validate_settings(self):
         REQUIRED_SETTINGS = ['API_URL', 'API_USERNAME', 'API_PASSWORD']

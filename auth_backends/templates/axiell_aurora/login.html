@@ -2,28 +2,21 @@
 
 {% load i18n bootstrap4 %}
 
-{% block title %}Kirjastokortti{% endblock %}
+{% block title %}{% trans "Library card login" %}{% endblock %}
 
 {% block content %}
 <form action="{% url 'social:begin' backend='axiell_aurora' %}" method='post' class='form'>
   {% csrf_token %}
   {% bootstrap_form form %}
   {% buttons %}
-    <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
+    <div style='margin-top: 1rem'>
+      <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
+    </div>
   {% endbuttons %}
-
-  {% comment %}
-  <div class="form-group">
-    <label for="borrower-card-id">{% trans "Library card identifier" %}</label>
-    <input type="text" class="form-control" name="borrower_card_id" id="borrower-card-id" placeholder="{% trans 'Card identifier' %}" />
-  </div>
-  <div class="form-group">
-    <label for="borrower-pin">{% trans "PIN" %}</label>
-    <input type="password" class="form-control" name="borrower_pin" id="borrower-pin" />
-  </div>
-  <input type="hidden" name="state" value="{{ state }}" />
-  <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
-  {% csrf_token %}
-  {% endcomment %}
 </form>
+
+<div class="dialog-footer">
+  <a href="{{ login_method_uri }}"><span aria-hidden="true">⟵ </span>{% trans "Return to login method selection" %}</a>
+</div>
+
 {% endblock %}
