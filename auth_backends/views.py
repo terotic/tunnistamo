@@ -1,21 +1,30 @@
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseServerError, Http404
 from django.urls import reverse
 from social_django.utils import load_backend, load_strategy
 from django.views.decorators.csrf import csrf_exempt
 from social_django.views import complete as social_django_complete
+from social_core.exceptions import MissingBackend
 
 
-def suomifi_metadata_view(request):
-    complete_url = reverse('auth_backends:suomifi_metadata')
-    saml_backend = load_backend(
-        load_strategy(request),
-        'suomifi',
-        redirect_uri=complete_url,
-    )
+def saml_metadata_view(request, backend):
+    complete_url = reverse('social:complete', args=(backend,))
+    try:
+        saml_backend = load_backend(
+            load_strategy(request),
+            backend,
+            redirect_uri=complete_url,
+        )
+    except MissingBackend:
+        raise Http404()
+
+    if not hasattr(saml_backend, 'generate_metadata_xml'):
+        raise Http404()
+
     metadata, errors = saml_backend.generate_metadata_xml()
     if not errors:
         return HttpResponse(content=metadata, content_type='text/xml')
+    return HttpResponseServerError(content=', '.join(errors))
 
 
 @csrf_exempt
