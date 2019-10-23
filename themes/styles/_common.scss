@@ -56,10 +56,6 @@
   }
 }
 
-.login-method-list {
-  border-bottom: 1px solid theme-color("primary");
-}
-
 .login-method {
   margin-bottom: 1em;
 
@@ -73,16 +69,17 @@
   }
 }
 
-.login-footer {
-  margin-top: 2rem;
+.dialog-footer {
+  padding-top: 2rem;
+  border-top: 1px solid $body-color;
   font-size: 0.8rem;
   a {
   }
 }
 
 .login-method__primary {
-  border-bottom: 1px solid theme-color("primary");
-  border-top: 1px solid theme-color("primary");
+  border-bottom: 1px solid $body-color;
+  border-top: 1px solid $body-color;
   padding-top: 1em;
 }
 
@@ -143,9 +140,9 @@
       }
     }
     &-axiell_aurora {
-      background-color: darken(#00c8f2, 20%);
+      background-color: darken(#00c8f2, 30%);
       &:hover {
-        background-color: darken(#00c8f2, 27%);
+        background-color: darken(#00c8f2, 37%);
       }
     }
     &-turku_suomifi {
