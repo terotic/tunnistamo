@@ -87,6 +87,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.staticfiles',
 
+    'themes',
     'parler',
     'compressor',
     'bootstrap4',
@@ -104,7 +105,6 @@ INSTALLED_APPS = (
     'django_filters',
 
     'helusers',
-    'themes',
     'content',
 
     'hkijwt',
@@ -135,7 +135,7 @@ MIDDLEWARE = (
     'tunnistamo.middleware.OIDCExceptionMiddleware',
 )
 
-AUTHENTICATION_BACKENDS = (
+AUTHENTICATION_BACKENDS = [
     'auth_backends.eduhelfi.EduHelFiAzure',
     'auth_backends.espoo.EspooAzure',
     'auth_backends.adfs.helsinki.HelsinkiADFS',
@@ -149,7 +149,7 @@ AUTHENTICATION_BACKENDS = (
     'auth_backends.axiell_aurora.AuroraAuth',
     'auth_backends.adfs.turku.TurkuADFS',
     'auth_backends.turku_suomifi.TurkuSuomiFiAuth',
-)
+]
 
 RESTRICTED_AUTHENTICATION_BACKENDS = (
     'auth_backends.suomifi.SuomiFiSAMLAuth',
@@ -483,6 +483,7 @@ SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 SOCIAL_AUTH_GOOGLE_KEY = env("SOCIAL_AUTH_GOOGLE_KEY")
 SOCIAL_AUTH_GOOGLE_SECRET = env("SOCIAL_AUTH_GOOGLE_SECRET")
 SOCIAL_AUTH_GOOGLE_SCOPE = ['email']
+SOCIAL_AUTH_GOOGLE_USE_UNIQUE_USER_ID = True
 
 SOCIAL_AUTH_HELSINKI_ADFS_KEY = env("SOCIAL_AUTH_HELSINKI_ADFS_KEY")
 SOCIAL_AUTH_HELSINKI_ADFS_SECRET = env("SOCIAL_AUTH_HELSINKI_ADFS_SECRET")

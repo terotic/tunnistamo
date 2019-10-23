@@ -26,6 +26,7 @@ class AuthenticationFailed(Exception):
 
 
 class AuroraLoginForm(forms.Form):
+    id = 'aurora_login_form'
     borrower_card_id = forms.CharField(label=_("Library card identifier"), max_length=32)
     borrower_pin = forms.CharField(
         label=_("Card PIN"),
@@ -54,7 +55,7 @@ class AuroraAuth(LegacyAuth):
 
         except requests.exceptions.RequestException as err:
             logger.exception('API call to %s failed' % path, exc_info=err)
-            raise APIError('API call to %s failed: %s' % str(err))
+            raise APIError('API call to %s failed: %s' % (path, str(err)))
 
         try:
             ret = resp.json()
@@ -106,8 +107,8 @@ class AuroraAuth(LegacyAuth):
             form = AuroraLoginForm()
 
         login_method_uri = reverse('login')
-        if 'next' in self.data:
-            login_method_uri += '?' + urlencode({'next': self.data['next']})
+        if request.GET:
+            login_method_uri += '?' + urlencode(request.GET)
 
         return render(request, self.FORM_HTML, {'form': form, 'login_method_uri': login_method_uri})
 

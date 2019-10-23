@@ -1,0 +1,6 @@
+{% load i18n %}
+<div class="alert alert-danger alert-link" role="alert"{% if form.id %} id="{{ form.id }}-errors"{% endif %}>
+    {% for error in errors %}
+        {{ error }}{% if not forloop.last %}<br>{% endif %}
+    {% endfor %}
+</div>
