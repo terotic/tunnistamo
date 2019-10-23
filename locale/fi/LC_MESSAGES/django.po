@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tunnistamo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 10:46+0300\n"
+"POT-Creation-Date: 2019-10-23 13:57+0300\n"
 "PO-Revision-Date: 2019-04-17 07:55+0000\n"
 "Last-Translator: Timo Tuominen <dev@hel.fi>, 2019\n"
 "Language-Team: Finnish (https://www.transifex.com/city-of-helsinki-1/teams/98217/fi/)\n"
@@ -55,7 +55,7 @@ msgstr "Kirjastokortin tunnus"
 
 #: auth_backends/axiell_aurora.py
 msgid "Card PIN"
-msgstr "Kortin PIN-koodi"
+msgstr "Tunnusluku (PIN)"
 
 #: auth_backends/axiell_aurora.py
 msgid "Library card login unavailable. Please try again later."
@@ -66,8 +66,32 @@ msgid "Invalid card number or PIN"
 msgstr "Väärä kortinnumero tai PIN-koodi"
 
 #: auth_backends/templates/axiell_aurora/login.html
+msgid "Library card login"
+msgstr "Tunnistaudu kirjastokortilla"
+
+#: auth_backends/templates/axiell_aurora/login.html
 msgid "Login"
 msgstr "Kirjaudu"
+
+#: auth_backends/templates/axiell_aurora/login.html
+msgid "Return to login method selection"
+msgstr "Palaa tunnistautumismenetelmän valintaan"
+
+#: content/models.py
+msgid "site owner name"
+msgstr "palvelun omistajan nimi"
+
+#: content/models.py
+msgid "privacy policy URL"
+msgstr "linkki tietosuojaselosteeseen"
+
+#: content/models.py
+msgid "general content"
+msgstr "yleinen sisältö"
+
+#: content/models.py
+msgid "general contents"
+msgstr "yleiset sisällöt"
 
 #: devices/models.py identities/models.py users/models.py
 msgid "user"
@@ -173,7 +197,7 @@ msgstr ""
 msgid "API domains"
 msgstr ""
 
-#: oidc_apis/models.py services/models.py
+#: oidc_apis/models.py services/models.py users/models.py
 msgid "name"
 msgstr "nimi"
 
@@ -382,6 +406,10 @@ msgstr "etunimi"
 #: users/models.py
 msgid "birthdate"
 msgstr "syntymäaika"
+
+#: users/models.py
+msgid "short description"
+msgstr "lyhyt kuvaus"
 
 #: users/models.py
 msgid "OIDC Client"
