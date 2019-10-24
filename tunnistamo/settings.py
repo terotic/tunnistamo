@@ -194,6 +194,17 @@ else:
     }
 
 #
+# Caching
+#
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': '%s-tunnistamo-cache' % env('COOKIE_PREFIX'),
+    }
+}
+
+
+#
 # Internationalization
 #
 LANGUAGE_CODE = 'fi'
