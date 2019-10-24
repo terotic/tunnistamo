@@ -45,6 +45,10 @@ class LoginMethod(TranslatableModel):
     background_color = models.CharField(max_length=50, null=True, blank=True)
     logo_url = models.URLField(null=True, blank=True)
     order = models.PositiveIntegerField(null=True)
+    require_registered_client = models.BooleanField(
+        default=False, verbose_name=_('require registered client'),
+        help_text=_('Set if this login method is not allowed when the login flow is started without an OIDC client')
+    )
 
     translations = TranslatedFields(
         name=models.CharField(verbose_name=_('name'), max_length=100),

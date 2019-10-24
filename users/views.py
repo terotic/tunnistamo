@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import translation
-from django.utils.http import quote
+from django.utils.http import urlencode
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 from django.views.decorators.cache import never_cache
@@ -62,6 +62,30 @@ def get_return_to_rp_uri(request, redirect_uri_params):
 class LoginView(TemplateView):
     template_name = "login.html"
 
+    def get_login_methods(self, request, allowed_methods, redirect_uri):
+        methods = []
+        for m in allowed_methods:
+            assert isinstance(m, LoginMethod)
+
+            begin_url = reverse('social:begin', kwargs={'backend': m.provider_id})
+
+            url_params = {}
+            if redirect_uri:
+                url_params['next'] = redirect_uri
+
+            backend = load_backend(load_strategy(request), m.provider_id, redirect_uri=None)
+            if hasattr(backend, 'get_allowed_idp_name'):
+                idp_name = backend.get_allowed_idp_name(request)
+                url_params['idp'] = idp_name
+
+            if url_params:
+                begin_url += '?' + urlencode(url_params)
+
+            m.login_url = begin_url
+            methods.append(m)
+
+        return methods
+
     def get(self, request, *args, **kwargs):  # noqa  (too complex)
         # Log the user out first so that we don't end up in the PSA "connect"
         # flow.
@@ -94,8 +118,6 @@ class LoginView(TemplateView):
                 except Client.DoesNotExist:
                     pass
 
-            next_url = quote(next_url)
-
         allowed_methods = None
         if app:
             allowed_methods = app.login_methods.all()
@@ -109,32 +131,17 @@ class LoginView(TemplateView):
             self.return_to_rp_uri = get_return_to_rp_uri(request, authorize_uri_params)
 
         if allowed_methods is None:
-            allowed_methods = LoginMethod.objects.all()
+            # Only allow the methods that do not require registered clients
+            # (this might happen when a browser enters LoginView directly for
+            # testing purposes).
+            allowed_methods = LoginMethod.objects.filter(require_registered_client=False)
 
-        methods = []
-        for m in allowed_methods:
-            assert isinstance(m, LoginMethod)
-            if m.provider_id == 'saml':
-                continue  # SAML support removed
+        login_methods = self.get_login_methods(request, allowed_methods, next_url)
 
-            m.login_url = reverse('social:begin', kwargs={'backend': m.provider_id})
-            if next_url:
-                m.login_url += '?next=' + next_url
+        if len(login_methods) == 1:
+            return redirect(login_methods[0].login_url)
 
-            if m.provider_id in getattr(settings, 'SOCIAL_AUTH_SUOMIFI_ENABLED_IDPS'):
-                # This check is used to exclude Suomi.fi auth method when using non-compliant auth provider
-                if next_url is None:
-                    continue
-                if re.match(getattr(settings, 'SOCIAL_AUTH_SUOMIFI_CALLBACK_MATCH'), next_url) is None:
-                    continue
-                m.login_url += '&amp;idp=' + m.provider_id
-
-            methods.append(m)
-
-        if len(methods) == 1:
-            return redirect(methods[0].login_url)
-
-        self.login_methods = methods
+        self.login_methods = login_methods
         return super(LoginView, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

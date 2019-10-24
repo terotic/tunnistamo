@@ -597,11 +597,6 @@ SOCIAL_AUTH_SUOMIFI_ENTITY_ATTRIBUTES = [
     },
 ]
 
-# The following regexp match is used to allow Suomi.fi authentication only when
-# using OpenId Connect provider.
-SOCIAL_AUTH_SUOMIFI_CALLBACK_MATCH = r'^/openid/authorize?.*'
-
-
 # Suomi.fi instance specific values.
 # These should be overwritten in local settings.
 
