@@ -11,6 +11,7 @@ class TurkuADFS(SAMLAuth):
 
     def generate_saml_config(self, idp=None):
         ret = super().generate_saml_config(idp)
+        ret['security']['wantAssertionsSigned'] = True,
         # ADFS doesn't reply with NameID
         ret['security']['wantNameId'] = False
         return ret
