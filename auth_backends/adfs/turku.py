@@ -1,8 +1,19 @@
+import logging
 import json
 from social_core.backends.saml import SAMLAuth, SAMLIdentityProvider
 from onelogin.saml2.idp_metadata_parser import OneLogin_Saml2_IdPMetadataParser
 from django.core.cache import cache
 from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
+
+from tunnistamo.exceptions import FriendlySocialAuthException
+
+
+logger = logging.getLogger(__name__)
+
+
+class NoAssociatedOID(FriendlySocialAuthException):
+    default_message = _('Your AD account does not have an associated OID')
 
 
 class TurkuADFS(SAMLAuth):
@@ -62,8 +73,18 @@ class TurkuADFS(SAMLAuth):
     def get_user_id(self, details, response):
         # We override this method, because we don't want the 'turku_adfs:'
         # prefix from superclass. We support only one IdP.
+        #
+        # Also, the OID field is not set for all accounts, so we fail
+        # authentication gracefully when that happens.
         idp = self.get_idp()
-        return idp.get_user_permanent_id(response['attributes'])
+        attrs = response['attributes']
+        uid = attrs.get(idp.conf['attr_user_permanent_id'])
+        if isinstance(uid, list):
+            uid = uid[0]
+        if not uid or not isinstance(uid, str):
+            logger.warn('Account has no OID field: %s\n' % attrs)
+            raise NoAssociatedOID()
+        return uid
 
     def is_email_needed(self, **kwargs):
         return False

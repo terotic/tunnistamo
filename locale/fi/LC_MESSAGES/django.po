@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tunnistamo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-23 15:58+0300\n"
+"POT-Creation-Date: 2019-10-30 12:47+0200\n"
 "PO-Revision-Date: 2019-04-17 07:55+0000\n"
 "Last-Translator: Timo Tuominen <dev@hel.fi>, 2019\n"
 "Language-Team: Finnish (https://www.transifex.com/city-of-helsinki-1/teams/98217/fi/)\n"
@@ -48,6 +48,10 @@ msgstr "Etunimi"
 #: adfs_provider/models.py
 msgid "Last name"
 msgstr "Sukunimi"
+
+#: auth_backends/adfs/turku.py
+msgid "Your AD account does not have an associated OID"
+msgstr "AD-käyttäjätunnukseesi ei ole merkitty OID-tunnistetta"
 
 #: auth_backends/axiell_aurora.py
 msgid "Library card identifier"
@@ -381,9 +385,30 @@ msgstr "palvelut"
 msgid "Cannot set both application and client."
 msgstr "Molempia \"application\" ja \"client\" ei voi asettaa."
 
+#: themes/templates/oidc_provider/authorize.html
+msgid "Permission request"
+msgstr "Lupapyyntö"
+
+#: themes/templates/oidc_provider/authorize.html
+#, python-format
+msgid "Service <strong>%(service_name)s</strong> is requesting access to the following information of your user account"
+msgstr "Palvelu <strong>%(service_name)s</strong> pyytää lupaa käyttää käyttäjätilisi seuraavia tietoja"
+
+#: themes/templates/oidc_provider/authorize.html
+msgid "Deny"
+msgstr "Älä anna lupaa"
+
+#: themes/templates/oidc_provider/authorize.html
+msgid "Allow"
+msgstr "Anna lupa"
+
 #: themes/templates/tunnistamo/base.html
 msgid "Close"
 msgstr "Sulje"
+
+#: tunnistamo/exceptions.py
+msgid "Authentication method temporarily unavailable."
+msgstr "Tunnistautumismenetelmä on väliaikaisesti pois käytöstä."
 
 #: tunnistamo/middleware.py
 msgid "Authentication failed."
@@ -410,6 +435,14 @@ msgstr "etunimi"
 #: users/models.py
 msgid "birthdate"
 msgstr "syntymäaika"
+
+#: users/models.py
+msgid "require registered client"
+msgstr ""
+
+#: users/models.py
+msgid "Set if this login method is not allowed when the login flow is started without an OIDC client"
+msgstr ""
 
 #: users/models.py
 msgid "short description"
@@ -462,20 +495,3 @@ msgstr "Jos olet yhteiskäyttötietokoneella, älä ruksi tätä."
 #: users/templates/login.html
 msgid "Return to the originating service"
 msgstr "Palaa asiointipalveluun"
-
-#: users/templates/oidc_provider/authorize.html
-msgid "Permission request"
-msgstr "Lupapyyntö"
-
-#: users/templates/oidc_provider/authorize.html
-#, python-format
-msgid "Service <strong>%(service_name)s</strong> is requesting access to the following information of your user account"
-msgstr "Palvelu <strong>%(service_name)s</strong> pyytää lupaa käyttää käyttäjätilisi seuraavia tietoja"
-
-#: users/templates/oidc_provider/authorize.html
-msgid "Deny"
-msgstr "Älä anna lupaa"
-
-#: users/templates/oidc_provider/authorize.html
-msgid "Allow"
-msgstr "Anna lupa"
