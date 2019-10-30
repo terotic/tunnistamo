@@ -52,7 +52,6 @@ class AuroraAuth(LegacyAuth):
         try:
             resp = requests.post(url, **kwargs)
             resp.raise_for_status()
-
         except requests.exceptions.RequestException as err:
             logger.exception('API call to %s failed' % path, exc_info=err)
             raise APIError('API call to %s failed: %s' % (path, str(err)))
@@ -71,7 +70,9 @@ class AuroraAuth(LegacyAuth):
         out = {}
 
         contact_info = response.get('ContactInfo', {})
-        email = contact_info.get('Email', '').strip().lower() or None
+        email = contact_info.get('Email', None)
+        if email is not None:
+            email = email.strip().lower() or None
         out['email'] = email
 
         personal_info = response.get('PersonalInfo', {})
