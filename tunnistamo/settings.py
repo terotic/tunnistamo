@@ -26,6 +26,7 @@ env = environ.Env(
     STATIC_ROOT=(str, os.path.join(BASE_DIR, 'static')),
     MEDIA_URL=(str, '/media/'),
     MEDIA_ROOT=(str, os.path.join(BASE_DIR, 'media')),
+    SAML_CERTIFICATE_PATH=(str, os.path.join(BASE_DIR, 'certs')),
     NODE_MODULES_ROOT=(str, os.path.join(BASE_DIR, 'node_modules')),
 
     TUNNISTAMO_THEME=(str, 'helsinki'),
