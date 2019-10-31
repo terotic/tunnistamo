@@ -5,7 +5,7 @@
 - Run migrations
 - Compile translations: `python manage.py compilemessages`
 - Collect static files: `python manage.py collectstatic --noinput`
-- Reload UWSGI
+- Reload uWSGI
 
 ## Installation
 
@@ -234,3 +234,10 @@ or with the `loaddata` command:
 
 - From the Django admin UI, add an API domain with an identifier of `https://auth.turku.fi`.
 - Configure each OIDC API and corresponding OIDC clients as required.
+
+### Periodic tasks
+
+Run the following commands about once per day (e.g. through cron):
+
+- OIDC provider key creation and expiration: `manage.py manage_openid_keys`
+- Expired session removal: `manage.py clearsessions`

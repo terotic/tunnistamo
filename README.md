@@ -32,6 +32,8 @@ Then create a postgres user and db as root:
 ```
 createuser <your username>
 createdb -O <your username> tunnistamo
+# or if you need to have a Finnish locale for the db
+createdb -T template0 -l fi_FI.UTF-8 -O <username> tunnistamo
 ```
 
 
@@ -51,6 +53,11 @@ pip install -r requirements.txt
 
 You may choose some other Python version to install but currently Tunnistamo
 requires Python 3.
+
+Install the Node dependencies:
+```
+yarn install
+```
 
 Create `local_settings.py` in the repo base dir containing the following line:
 ```
