@@ -16,7 +16,7 @@
 <body class="bg-brand-light">
   <div class="container content-container">
     <div class="row justify-content-center">
-      <div class="col-sm-10 col-md-8 mt-5">
+      <div class="col-sm-10 col-md-8 col-lg-6 mt-5">
         <div class="card content-card">
           <header class="card-title">
             <div class="logo theme-logo"></div>
@@ -35,6 +35,18 @@
           </div>
           {% endif %}
           {% block body_content %}{% endblock %}
+          {% if general_content.privacy_policy_url %}
+          <div id="privacy-policy-section" class="text-muted text-right">
+            <small>
+              See {{ general_content.site_owner_name|default:"Tunnistamo" }}
+              <a href="{{ general_content.privacy_policy_url }}" target="_blank">
+              {% blocktrans %}
+                privacy policy
+              {% endblocktrans %}
+              </a>
+            </small>
+          </div>
+          {% endif %}
         </div>
       </div>
     </div>
